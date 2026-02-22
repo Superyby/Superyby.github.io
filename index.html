@@ -2,360 +2,1642 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Memory & Eternity | 我们的永恒诗篇</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+SC:wght@300;600&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>蓝黑永恒 · 我们的恋爱纪念册</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold: #d4af37;
-            --rose: #ffafbd;
-            --deep-rose: #ff8e91;
-            --glass: rgba(255, 255, 255, 0.85);
-            --text: #4a4a4a;
-            --shadow: 0 10px 30px rgba(0,0,0,0.08);
+            --navy: #0a192f;
+            --dark-blue: #112240;
+            --slate: #8892b0;
+            --light-slate: #a8b2d1;
+            --lightest-slate: #ccd6f6;
+            --blue: #64ffda;
+            --gold: #ffd700;
+            --white: #e6f1ff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            --radius: 12px;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            background: #fffafa;
-            color: var(--text);
-            font-family: 'Noto Serif SC', serif;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--navy);
+            color: var(--lightest-slate);
+            line-height: 1.7;
             overflow-x: hidden;
+            scroll-behavior: smooth;
         }
 
-        /* ==================== 1. 3D 信封开屏动画 ==================== */
-        #envelope-wrapper {
-            position: fixed; inset: 0; background: #f4f1ea; z-index: 10000;
-            display: flex; justify-content: center; align-items: center;
-            transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1), opacity 1s;
-        }
-        .envelope {
-            position: relative; width: 300px; height: 200px; background: #e0d8c3;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1); cursor: pointer;
-        }
-        .envelope::before { /* 信封盖 */
-            content: ""; position: absolute; top: 0; z-index: 2;
-            border-top: 110px solid #d1c7ae; border-left: 150px solid transparent; border-right: 150px solid transparent;
-            transform-origin: top; transition: all 0.8s;
-        }
-        .envelope.open::before { transform: rotateX(180deg); z-index: 0; }
-        .seal {
-            position: absolute; top: 90px; left: 130px; width: 40px; height: 40px;
-            background: #b22222; border-radius: 50%; z-index: 3;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;
-            color: white; font-size: 20px; transition: 0.5s;
-        }
-        .envelope.open .seal { opacity: 0; transform: scale(2); }
-        .letter-preview {
-            position: absolute; top: 10px; left: 10px; width: 280px; height: 180px;
-            background: white; z-index: 1; transition: 0.8s; padding: 20px;
-            font-family: 'Ma Shan Zheng', cursive; text-align: center;
-        }
-        .envelope.open .letter-preview { transform: translateY(-120px); }
-
-        /* ==================== 2. 全局唯美样式 ==================== */
-        #main-site { display: none; opacity: 0; transition: 2s; }
-        .bg-glow {
-            position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,175,189,0.3) 0%, transparent 70%);
-            z-index: -1; pointer-events: none; filter: blur(50px);
+        /* ==================== 加载页面 ==================== */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, var(--navy) 0%, var(--dark-blue) 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s ease;
         }
 
-        /* 顶部导航 */
-        nav {
-            padding: 30px; display: flex; justify-content: space-between; align-items: center;
-            position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);
+        .loader-heart {
+            width: 80px;
+            height: 80px;
+            background-color: var(--blue);
+            position: relative;
+            transform: rotate(45deg);
+            animation: heartbeat 1.5s ease-in-out infinite;
+            margin-bottom: 30px;
         }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 30px; color: var(--deep-rose); }
 
-        /* 计时器模块 */
-        .hero { height: 80vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-        .timer-grid { display: flex; gap: 25px; margin-top: 30px; }
-        .t-card { 
-            background: var(--glass); padding: 25px; border-radius: 20px; box-shadow: var(--shadow);
-            border: 1px solid rgba(255,255,255,0.6);
+        .loader-heart::before,
+        .loader-heart::after {
+            content: '';
+            width: 80px;
+            height: 80px;
+            background-color: var(--blue);
+            border-radius: 50%;
+            position: absolute;
         }
-        .t-num { font-size: 3.5rem; color: var(--deep-rose); font-weight: 300; display: block; }
-        .t-unit { font-size: 12px; letter-spacing: 3px; opacity: 0.5; }
 
-        /* 拍立得照片墙 */
-        .section-title { font-size: 2rem; text-align: center; margin: 80px 0 40px; font-family: 'Noto Serif SC'; letter-spacing: 5px; }
-        .photo-wall { 
-            display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); 
-            gap: 30px; padding: 0 5vw; 
+        .loader-heart::before {
+            top: -40px;
+            left: 0;
         }
-        .polaroid {
-            background: white; padding: 15px 15px 40px; box-shadow: var(--shadow);
-            transform: rotate(var(--r)); transition: 0.3s; cursor: zoom-in;
-        }
-        .polaroid:hover { transform: rotate(0deg) scale(1.05); z-index: 10; }
-        .polaroid img { width: 100%; height: 200px; object-fit: cover; filter: sepia(0.2); }
-        .polaroid p { margin-top: 15px; font-family: 'Ma Shan Zheng'; font-size: 18px; color: #666; text-align: center; }
 
-        /* 时间轴：文艺排版 */
-        .timeline { max-width: 900px; margin: 0 auto; position: relative; }
-        .timeline::before { content: ""; position: absolute; left: 50%; height: 100%; width: 1px; background: #eee; }
-        .timeline-item { width: 100%; margin-bottom: 60px; display: flex; justify-content: space-between; align-items: center; }
-        .timeline-content { width: 42%; background: var(--glass); padding: 30px; border-radius: 20px; box-shadow: var(--shadow); position: relative; }
-        .timeline-item:nth-child(even) { flex-direction: row-reverse; }
-        .timeline-date { color: var(--deep-rose); font-weight: bold; margin-bottom: 10px; display: block; }
+        .loader-heart::after {
+            top: 0;
+            left: -40px;
+        }
 
-        /* ==================== 3. 电影片尾式读信特效 ==================== */
-        #movie-reader {
-            position: fixed; inset: 0; background: rgba(10,10,10,0.98); z-index: 20000;
-            display: none; color: #ddd; flex-direction: column; align-items: center; overflow: hidden;
+        @keyframes heartbeat {
+            0%, 100% { transform: rotate(45deg) scale(1); }
+            50% { transform: rotate(45deg) scale(1.1); }
         }
-        .credits-wrap {
-            position: absolute; width: 80%; max-width: 600px; top: 100%;
-            text-align: center; line-height: 2.5; font-size: 1.2rem;
-            animation: scrollUp 20s linear forwards;
-        }
-        @keyframes scrollUp {
-            from { top: 100%; }
-            to { top: -150%; }
-        }
-        .reader-close { position: fixed; right: 40px; top: 40px; color: white; cursor: pointer; font-size: 30px; z-index: 20001; }
 
-        /* 管理弹窗美化 */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(255,175,189,0.1); backdrop-filter: blur(10px);
-            display: none; justify-content: center; align-items: center; z-index: 5000;
+        .loader-text {
+            font-size: 18px;
+            color: var(--light-slate);
+            margin-top: 20px;
+            opacity: 0.8;
+            letter-spacing: 2px;
         }
-        .modal-box {
-            background: white; padding: 50px; border-radius: 40px; width: 90%; max-width: 500px;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.1); border: 8px solid #fff;
-        }
-        input, textarea { width: 100%; padding: 15px; margin: 15px 0; border: 1px solid #eee; border-radius: 15px; background: #fdfdfd; outline: none; }
-        .btn-submit { background: var(--deep-rose); color: white; border: none; padding: 15px 40px; border-radius: 50px; width: 100%; cursor: pointer; font-weight: bold; }
 
+        /* ==================== 顶部导航栏 ==================== */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 22px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgba(10, 25, 47, 0.92);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+            transition: var(--transition);
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: var(--white);
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .logo span {
+            color: var(--blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--light-slate);
+            font-weight: 500;
+            font-size: 15px;
+            position: relative;
+            padding: 8px 0;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--blue);
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        .btn-admin {
+            background-color: transparent;
+            color: var(--blue);
+            border: 1px solid var(--blue);
+            padding: 12px 28px;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            letter-spacing: 0.5px;
+        }
+
+        .btn-admin:hover {
+            background-color: rgba(100, 255, 218, 0.1);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 255, 218, 0.2);
+        }
+
+        /* ==================== 主内容区 ==================== */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(100, 255, 218, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 215, 0, 0.05) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .hero-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--white);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--light-slate);
+            max-width: 700px;
+            margin: 0 auto 50px;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* ==================== 计时器 ==================== */
+        .timer-container {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .timer-card {
+            background-color: rgba(17, 34, 64, 0.7);
+            border-radius: var(--radius);
+            padding: 30px;
+            min-width: 140px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        .timer-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+            border-color: var(--blue);
+        }
+
+        .timer-number {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: var(--blue);
+            display: block;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .timer-label {
+            font-size: 0.9rem;
+            color: var(--light-slate);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+        }
+
+        .milestone {
+            font-size: 1.1rem;
+            color: var(--blue);
+            background-color: rgba(100, 255, 218, 0.1);
+            padding: 12px 25px;
+            border-radius: 50px;
+            display: inline-block;
+            margin-top: 30px;
+            font-weight: 500;
+            border: 1px solid rgba(100, 255, 218, 0.3);
+        }
+
+        /* ==================== 电影胶片风格照片墙 ==================== */
+        .section {
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            font-weight: 700;
+            color: var(--white);
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--blue);
+        }
+
+        .film-strip-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            padding: 60px 0;
+            margin: 50px 0;
+        }
+
+        .film-strip {
+            display: flex;
+            gap: 25px;
+            padding: 40px 20px;
+            animation: scrollFilm 40s linear infinite;
+            width: max-content;
+        }
+
+        .film-strip:hover {
+            animation-play-state: paused;
+        }
+
+        @keyframes scrollFilm {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(calc(-320px * 6 - 25px * 5)); }
+        }
+
+        .film-frame {
+            position: relative;
+            min-width: 320px;
+            height: 450px;
+            background: var(--dark-blue);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 10px solid #0a192f;
+        }
+
+        .film-frame::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--blue) 0px,
+                var(--blue) 15px,
+                #0a192f 15px,
+                #0a192f 30px
+            );
+            z-index: 2;
+        }
+
+        .film-frame::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 20px;
+            background: repeating-linear-gradient(
+                90deg,
+                var(--blue) 0px,
+                var(--blue) 15px,
+                #0a192f 15px,
+                #0a192f 30px
+            );
+            z-index: 2;
+        }
+
+        .film-frame:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            z-index: 10;
+        }
+
+        .film-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease;
+        }
+
+        .film-frame:hover .film-img {
+            transform: scale(1.1);
+        }
+
+        .film-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(to top, rgba(10, 25, 47, 0.9), transparent);
+            color: var(--white);
+            transform: translateY(100%);
+            opacity: 0;
+            transition: var(--transition);
+        }
+
+        .film-frame:hover .film-caption {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .film-date {
+            font-size: 0.9rem;
+            color: var(--blue);
+            margin-bottom: 5px;
+        }
+
+        /* ==================== 时间轴 ==================== */
+        .timeline-section {
+            background-color: rgba(17, 34, 64, 0.5);
+            padding: 100px 0;
+        }
+
+        .timeline {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent, var(--blue), transparent);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content {
+            margin-right: auto;
+            margin-left: 0;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content {
+            margin-left: auto;
+            margin-right: 0;
+        }
+
+        .timeline-content {
+            width: 45%;
+            background-color: rgba(17, 34, 64, 0.7);
+            border-radius: var(--radius);
+            padding: 30px;
+            box-shadow: var(--shadow);
+            position: relative;
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+            transition: var(--transition);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-5px);
+            border-color: var(--blue);
+        }
+
+        .timeline-content::before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            width: 16px;
+            height: 16px;
+            background-color: var(--blue);
+            border-radius: 50%;
+            border: 4px solid var(--navy);
+            box-shadow: 0 0 0 3px var(--blue);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-content::before {
+            right: -58px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-content::before {
+            left: -58px;
+        }
+
+        .timeline-date {
+            color: var(--blue);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .timeline-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--white);
+            font-family: 'Playfair Display', serif;
+        }
+
+        .timeline-text {
+            font-size: 1rem;
+            color: var(--light-slate);
+            line-height: 1.7;
+            opacity: 0.9;
+        }
+
+        /* ==================== 愿望清单和时光胶囊 ==================== */
+        .features-section {
+            padding: 100px 0;
+            background-color: var(--navy);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 40px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            background-color: rgba(17, 34, 64, 0.7);
+            border-radius: var(--radius);
+            padding: 40px 30px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            border: 1px solid rgba(100, 255, 218, 0.1);
+            backdrop-filter: blur(10px);
+            height: 100%;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: var(--blue);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--blue);
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            color: var(--white);
+            font-family: 'Playfair Display', serif;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .feature-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--blue);
+        }
+
+        /* ==================== 愿望清单样式 ==================== */
+        .wish-list {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .wish-item {
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.1);
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .wish-item:last-child {
+            border-bottom: none;
+        }
+
+        .wish-item:hover {
+            background-color: rgba(100, 255, 218, 0.05);
+            padding-left: 10px;
+            border-radius: 8px;
+        }
+
+        .wish-checkbox {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--blue);
+            border-radius: 4px;
+            margin-right: 15px;
+            cursor: pointer;
+            position: relative;
+            transition: var(--transition);
+            background-color: transparent;
+        }
+
+        .wish-checkbox:checked {
+            background-color: var(--blue);
+            border-color: var(--blue);
+        }
+
+        .wish-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            color: var(--navy);
+            font-size: 14px;
+            font-weight: bold;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .wish-text {
+            flex: 1;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .wish-checkbox:checked + .wish-text {
+            text-decoration: line-through;
+            color: var(--slate);
+            opacity: 0.6;
+        }
+
+        .wish-progress {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: var(--light-slate);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: rgba(100, 255, 218, 0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--blue), #4dc0b5);
+            border-radius: 4px;
+            transition: width 0.8s ease;
+        }
+
+        /* ==================== 时光胶囊样式 ==================== */
+        .capsule-item {
+            background-color: rgba(17, 34, 64, 0.5);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+            border-left: 4px solid var(--blue);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .capsule-item:hover {
+            background-color: rgba(17, 34, 64, 0.8);
+            transform: translateX(10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .capsule-date {
+            font-size: 0.9rem;
+            color: var(--blue);
+            opacity: 0.8;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .capsule-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        /* ==================== 底部 ==================== */
+        footer {
+            background-color: var(--dark-blue);
+            color: var(--light-slate);
+            padding: 80px 0 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-top: 1px solid rgba(100, 255, 218, 0.1);
+        }
+
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--blue), var(--gold), var(--blue));
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .footer-heart {
+            color: var(--blue);
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: gentleFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+        }
+
+        .footer-text {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            opacity: 0.9;
+            line-height: 1.8;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .copyright {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        /* ==================== 模态框 ==================== */
+        .modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(10, 25, 47, 0.95);
+            z-index: 2000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-content {
+            background-color: var(--dark-blue);
+            border-radius: var(--radius);
+            padding: 50px;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: modalFadeIn 0.4s ease;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: translateY(30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: var(--light-slate);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .modal-close:hover {
+            color: var(--blue);
+            background-color: rgba(100, 255, 218, 0.1);
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            color: var(--white);
+            margin-bottom: 30px;
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--light-slate);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: rgba(10, 25, 47, 0.5);
+            color: var(--white);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(100, 255, 218, 0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--blue);
+            color: var(--navy);
+            border: none;
+            padding: 18px 30px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #52d4bb;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(100, 255, 218, 0.3);
+        }
+
+        /* ==================== 时光胶囊阅读器 ==================== */
+        .capsule-reader {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(10, 25, 47, 0.98);
+            z-index: 3000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+            overflow: auto;
+        }
+
+        .capsule-content {
+            max-width: 700px;
+            width: 100%;
+            background-color: var(--dark-blue);
+            border-radius: var(--radius);
+            padding: 60px;
+            position: relative;
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.6);
+            animation: capsuleFadeIn 0.5s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid rgba(100, 255, 218, 0.2);
+        }
+
+        @keyframes capsuleFadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .capsule-header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid rgba(100, 255, 218, 0.2);
+            padding-bottom: 30px;
+        }
+
+        .capsule-title {
+            font-size: 2.5rem;
+            color: var(--blue);
+            margin-bottom: 15px;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .capsule-date {
+            font-size: 1.2rem;
+            color: var(--light-slate);
+            font-style: italic;
+        }
+
+        .capsule-text {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            color: var(--lightest-slate);
+            white-space: pre-line;
+            text-align: justify;
+        }
+
+        /* ==================== 响应式设计 ==================== */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 3.2rem;
+            }
+            
+            .film-frame {
+                min-width: 300px;
+                height: 420px;
+            }
+            
+            @keyframes scrollFilm {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(calc(-300px * 6 - 25px * 5)); }
+            }
+        }
+
+        @media (max-width: 992px) {
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .timeline::before {
+                left: 30px;
+            }
+            
+            .timeline-content {
+                width: calc(100% - 80px);
+                margin-left: 80px !important;
+                margin-right: 0 !important;
+            }
+            
+            .timeline-content::before {
+                left: -58px !important;
+                right: auto !important;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            header {
+                padding: 18px 20px;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.1rem;
+                padding: 0 20px;
+            }
+            
+            .timer-card {
+                min-width: 120px;
+                padding: 25px;
+            }
+            
+            .timer-number {
+                font-size: 2.8rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+            
+            .film-frame {
+                min-width: 280px;
+                height: 380px;
+            }
+            
+            .modal-content {
+                padding: 40px 25px;
+            }
+            
+            .capsule-content {
+                padding: 40px 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .timer-container {
+                gap: 15px;
+            }
+            
+            .timer-card {
+                min-width: 100px;
+                padding: 20px;
+            }
+            
+            .timer-number {
+                font-size: 2.2rem;
+            }
+            
+            .film-frame {
+                min-width: 260px;
+                height: 350px;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(17, 34, 64, 0.5);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--blue);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #52d4bb;
+        }
     </style>
 </head>
 <body>
-
-    <div id="envelope-wrapper">
-        <div class="envelope" id="main-envelope" onclick="openEnvelope()">
-            <div class="seal">♥</div>
-            <div class="letter-preview">
-                <p style="margin-top:20px;">亲爱的：</p>
-                <p style="margin-top:10px;">展信佳，这是属于我们的时光集...</p>
-                <p style="margin-top:30px; font-size: 14px; opacity: 0.5;">（点击开启）</p>
-            </div>
+    <!-- 加载页面 -->
+    <div id="loader">
+        <div class="loader-content">
+            <div class="loader-heart"></div>
+            <h1 style="font-family: 'Playfair Display', serif; font-size: 48px; color: var(--blue); margin-bottom: 20px;">蓝黑永恒</h1>
+            <p class="loader-text">加载我们的永恒故事...</p>
         </div>
     </div>
 
-    <div id="main-site">
-        <div class="bg-glow" style="top: -100px; left: -100px;"></div>
-        <div class="bg-glow" style="bottom: 0; right: 0; background: radial-gradient(circle, rgba(161,140,209,0.2) 0%, transparent 70%);"></div>
+    <!-- 顶部导航栏 -->
+    <header>
+        <div class="logo">蓝黑<span>永恒</span></div>
+        <div class="nav-links">
+            <a href="#home" class="nav-link active">首页</a>
+            <a href="#gallery" class="nav-link">胶片回忆</a>
+            <a href="#timeline" class="nav-link">时光轨迹</a>
+            <a href="#wishes" class="nav-link">愿望清单</a>
+            <a href="#capsules" class="nav-link">时光胶囊</a>
+        </div>
+        <button class="btn-admin" onclick="showAdmin()">管理空间</button>
+    </header>
 
-        <nav>
-            <div class="logo">Our Eternal Memory</div>
-            <button class="btn-submit" style="width:auto; padding: 10px 25px;" onclick="showAdmin()">管理空间</button>
-        </nav>
-
-        <header class="hero">
-            <h2 style="letter-spacing: 10px; opacity: 0.4; font-weight: 300;">SINCE WE MET</h2>
-            <div class="timer-grid" id="main-timer">
-                <div class="t-card"><span class="t-num" id="d">000</span><span class="t-unit">DAYS</span></div>
-                <div class="t-card"><span class="t-num" id="h">00</span><span class="t-unit">HOURS</span></div>
-                <div class="t-card"><span class="t-num" id="m">00</span><span class="t-unit">MINS</span></div>
-                <div class="t-card"><span class="t-num" id="s">00</span><span class="t-unit">SECS</span></div>
+    <!-- 主内容区 -->
+    <main>
+        <!-- 首页 -->
+        <section id="home" class="hero">
+            <div class="hero-bg"></div>
+            <div class="container">
+                <h1 class="hero-title">蓝黑永恒 · 我们的故事</h1>
+                <p class="hero-subtitle">深邃如夜空，永恒如星辰。这里记录着我们共同走过的岁月，每一刻都值得被珍藏。</p>
+                
+                <!-- 计时器 -->
+                <div class="timer-container">
+                    <div class="timer-card">
+                        <span class="timer-number" id="days">000</span>
+                        <span class="timer-label">天数</span>
+                    </div>
+                    <div class="timer-card">
+                        <span class="timer-number" id="hours">00</span>
+                        <span class="timer-label">小时</span>
+                    </div>
+                    <div class="timer-card">
+                        <span class="timer-number" id="minutes">00</span>
+                        <span class="timer-label">分钟</span>
+                    </div>
+                    <div class="timer-card">
+                        <span class="timer-number" id="seconds">00</span>
+                        <span class="timer-label">秒数</span>
+                    </div>
+                </div>
+                
+                <div class="milestone" id="milestone-text">距离下一个纪念日还有 520 天</div>
             </div>
-            <p id="milestone-text" style="margin-top: 30px; color: var(--deep-rose); font-style: italic;"></p>
-        </header>
-
-        <section>
-            <h2 class="section-title">浮光掠影 · Photo Wall</h2>
-            <div class="photo-wall" id="photo-render"></div>
         </section>
 
-        <section>
-            <h2 class="section-title">时光轨迹 · Timeline</h2>
-            <div class="timeline" id="timeline-render"></div>
+        <!-- 照片墙 - 电影胶片风格 -->
+        <section id="gallery" class="section">
+            <div class="container">
+                <h2 class="section-title">胶片回忆</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; color: var(--light-slate); font-size: 1.1rem; opacity: 0.8;">
+                    如电影般记录我们的故事，每一帧都闪烁着永恒的光芒，在时光的长河中静静流淌。
+                </p>
+                
+                <div class="film-strip-container">
+                    <div class="film-strip" id="photoGallery">
+                        <!-- 照片将通过JS动态加载 -->
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 40px;">
+                    <p style="color: var(--light-slate); font-size: 0.9rem; opacity: 0.6;">
+                        <i class="fas fa-info-circle" style="margin-right: 8px;"></i>
+                        悬停暂停滚动，点击照片查看详情
+                    </p>
+                </div>
+            </div>
         </section>
 
-        <section style="display: flex; flex-wrap: wrap; gap: 50px; padding: 100px 5vw;">
-            <div style="flex: 1; min-width: 300px;">
-                <h2 class="section-title" style="text-align: left;">恋爱清单 · Bucket List</h2>
-                <div id="wish-render"></div>
-            </div>
-            <div style="flex: 1; min-width: 300px;">
-                <h2 class="section-title" style="text-align: left;">时光胶囊 · Time Capsule</h2>
-                <div id="capsule-render"></div>
+        <!-- 时间轴 -->
+        <section id="timeline" class="timeline-section">
+            <div class="container">
+                <h2 class="section-title">时光轨迹</h2>
+                <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; color: var(--light-slate); font-size: 1.1rem; opacity: 0.8;">
+                    生命中那些闪耀的时刻，串联成我们独一无二的故事线，如同夜空中的星辰，永远闪烁。
+                </p>
+                <div class="timeline" id="timelineContainer">
+                    <!-- 时间轴内容将通过JS动态加载 -->
+                </div>
             </div>
         </section>
+
+        <!-- 愿望清单和时光胶囊 -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">未来与梦想</h2>
+                <div class="features">
+                    <!-- 愿望清单 -->
+                    <div id="wishes" class="feature-card">
+                        <i class="fas fa-heart feature-icon"></i>
+                        <h3 class="feature-title">愿望清单</h3>
+                        <div class="wish-progress">
+                            <div class="progress-text">
+                                <span>已完成</span>
+                                <span id="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="wish-list" id="wishList">
+                            <!-- 愿望清单将通过JS动态加载 -->
+                        </div>
+                    </div>
+                    
+                    <!-- 时光胶囊 -->
+                    <div id="capsules" class="feature-card">
+                        <i class="fas fa-capsules feature-icon"></i>
+                        <h3 class="feature-title">时光胶囊</h3>
+                        <div id="capsuleList">
+                            <!-- 时光胶囊将通过JS动态加载 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 底部 -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-heart">💙</div>
+                <h3 style="font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 20px; color: var(--white);">蓝黑永恒</h3>
+                <p class="footer-text">爱是永恒的星辰，在深邃的夜空中永远闪烁。<br>愿我们的故事，如宇宙般浩瀚，如时间般永恒。</p>
+                <p class="copyright">© 2024 - 2026 蓝黑永恒 · 我们的恋爱纪念册</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- 管理模态框 -->
+    <div id="adminModal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="hideAdmin()">&times;</span>
+            <h3 class="modal-title">记录新时刻</h3>
+            <form id="adminForm">
+                <div class="form-group">
+                    <label for="dataType">类型</label>
+                    <select id="dataType" class="form-control" onchange="toggleFields()">
+                        <option value="photo">添加照片</option>
+                        <option value="moment">添加里程碑</option>
+                        <option value="capsule">写时光胶囊</option>
+                        <option value="wish">添加愿望</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="title">标题/描述</label>
+                    <input type="text" id="title" class="form-control" placeholder="请输入标题或描述">
+                </div>
+                <div class="form-group" id="dateGroup">
+                    <label for="date">日期</label>
+                    <input type="date" id="date" class="form-control">
+                </div>
+                <div class="form-group" id="contentGroup">
+                    <label for="content" id="contentLabel">内容/照片地址</label>
+                    <textarea id="content" class="form-control" rows="4" placeholder="请输入具体内容或照片地址"></textarea>
+                </div>
+                <button type="button" class="btn-primary" onclick="saveData()">存入记忆库</button>
+            </form>
+        </div>
     </div>
 
-    <div id="movie-reader">
-        <span class="reader-close" onclick="closeReader()">&times;</span>
-        <div class="credits-wrap" id="credits-content"></div>
-    </div>
-
-    <div class="modal-overlay" id="admin-modal">
-        <div class="modal-box">
-            <h3 style="text-align: center; margin-bottom: 20px;">记录新时刻</h3>
-            <select id="data-type">
-                <option value="photo">添加照片</option>
-                <option value="moment">添加里程碑</option>
-                <option value="capsule">写时光胶囊</option>
-            </select>
-            <input type="text" id="ipt-title" placeholder="标题/描述">
-            <input type="date" id="ipt-date">
-            <textarea id="ipt-content" rows="4" placeholder="具体内容/照片地址"></textarea>
-            <button class="btn-submit" onclick="saveData()">存入记忆库</button>
-            <button onclick="hideAdmin()" style="background:none; border:none; width:100%; margin-top:15px; color:#aaa;">取消</button>
+    <!-- 时光胶囊阅读器 -->
+    <div id="capsuleReader" class="capsule-reader">
+        <div class="capsule-content">
+            <span class="modal-close" onclick="closeCapsule()">&times;</span>
+            <div class="capsule-header">
+                <h2 class="capsule-title" id="capsuleReaderTitle">致一年后的我们</h2>
+                <p class="capsule-date" id="capsuleReaderDate">2025-05-20</p>
+            </div>
+            <div class="capsule-text" id="capsuleReaderContent">
+                <!-- 胶囊内容将通过JS动态加载 -->
+            </div>
         </div>
     </div>
 
     <script>
-        // ==================== 1. 配置与测试数据 ====================
+        // ==================== 初始化 ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // 隐藏加载页面
+            setTimeout(() => {
+                document.getElementById('loader').style.opacity = '0';
+                document.getElementById('loader').style.visibility = 'hidden';
+            }, 1500);
+            
+            // 初始化数据
+            initData();
+            renderAll();
+            startTimer();
+            
+            // 平滑滚动导航
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                        
+                        // 更新导航链接状态
+                        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                        this.classList.add('active');
+                    }
+                });
+            });
+        });
+
+        // ==================== 数据配置 ====================
         const CONFIG = {
-            startDate: '2024-05-20T13:14:00',
-            pwd: '1314'
+            startDate: '2024-05-20T13:14:00', // 纪念日开始时间
+            password: '1314' // 管理密码
         };
 
-        const MOCK_DATA = {
+        // 默认数据
+        const DEFAULT_DATA = {
             photos: [
-                { url: "https://picsum.photos/500/600?r=1", note: "第一次野餐的午后" },
-                { url: "https://picsum.photos/500/600?r=2", note: "大雨里奔跑的我们" },
-                { url: "https://picsum.photos/500/600?r=3", note: "海边的那个日落" },
-                { url: "https://picsum.photos/500/600?r=4", note: "图书馆偷拍的侧颜" }
+                { url: "https://images.unsplash.com/photo-1518568814500-bf0f8d125f46?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "星光下的约定", date: "2024-06-15" },
+                { url: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "海边的夜晚", date: "2024-08-20" },
+                { url: "https://images.unsplash.com/photo-1492681290082-e932832941e6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "图书馆的静谧", date: "2024-10-05" },
+                { url: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "雨中的浪漫", date: "2024-11-12" },
+                { url: "https://images.unsplash.com/photo-1511988617509-a57c8a288659?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "星空下的誓言", date: "2024-12-25" },
+                { url: "https://images.unsplash.com/photo-1516487200032-8532cb603261?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80", note: "初雪的温暖", date: "2025-01-10" }
             ],
             moments: [
-                { date: "2024-05-20", title: "遇见你，万物可爱", text: "那是我们故事的开始，天空是橘子味的。" },
-                { date: "2024-08-15", title: "第一束玫瑰", text: "你捧着花出现在校门口，笑得比花还灿烂。" }
+                { date: "2024-05-20", title: "星辰为证，初见倾心", text: "在那个星光璀璨的夜晚，我们的故事开始了。你是夜空中最亮的星，照亮了我的整个世界。" },
+                { date: "2024-08-15", title: "第一份礼物", text: "你送我的那本诗集，至今还放在我的床头。每一页都记录着我们的点点滴滴，每一个字都闪烁着爱的光芒。" },
+                { date: "2024-12-24", title: "第一个圣诞夜", text: "我们在温暖的灯光下装饰圣诞树，许下了第一个共同的圣诞愿望。雪花轻轻飘落，像是为我们的爱情祝福。" },
+                { date: "2025-02-14", title: "第一个情人节", text: "简单却深刻的陪伴，就是最好的礼物。有你陪伴的每一天，都是情人节。" }
             ],
             capsules: [
-                { unlock: "2025-05-20", title: "致一年后的我们", content: "亲爱的，当你看到这封信的时候，我们已经共同走过了一年。\n这一年里，我们有过争吵，但更多的是甜蜜。\n还记得那个关于未来的约定吗？\n我想和你去圣托里尼，去北欧看极光...\n无论时间怎么流逝，我的爱始终如初。\n—— 爱你的我" },
-                { unlock: "2026-02-14", title: "情人节的约定", content: "这是一封还在封印中的信件..." }
+                { unlock: "2025-05-20", title: "致一年后的我们", content: "亲爱的，\n\n当你看到这封信的时候，我们已经共同走过了一年。\n这一年里，我们像夜空中交织的星辰，虽有距离却彼此照亮。\n还记得我们在星空下的约定吗？\n我想和你去北极看极光，去沙漠看星空，去所有见证永恒的地方。\n\n无论时间如何流逝，我的爱如星辰般永恒。\n\n—— 永远爱你的我" },
+                { unlock: "2026-02-14", title: "情人节的永恒约定", content: "这是一封还在封印中的信件，等到2026年情人节那天才能开启。\n\n不知道那时的我们是什么样子，但我知道，我依然深爱着你。\n希望那时的我们已经完成了更多共同的梦想，\n一起走过了更多见证永恒的地方。\n\n爱，如星辰般永恒。" }
             ],
-            wishes: ["一起看50次日落", "养一只叫布丁的猫", "去一次冰岛", "学会为你做一顿晚餐"]
+            wishes: [
+                { text: "一起看100次星空", checked: false },
+                { text: "养一只叫星辰的宠物", checked: true },
+                { text: "去北极看极光", checked: false },
+                { text: "学会为对方做早餐", checked: false },
+                { text: "共同完成一次长途旅行", checked: true },
+                { text: "拍一组星夜主题的纪念照", checked: false },
+                { text: "一起看100部经典电影", checked: true },
+                { text: "去海边看一次日出", checked: false },
+                { text: "写一本共同旅行日记", checked: true },
+                { text: "一起学习天文知识", checked: false }
+            ]
         };
 
-        let db = JSON.parse(localStorage.getItem('love_eternity')) || MOCK_DATA;
+        let appData = JSON.parse(localStorage.getItem('blue_black_eternity')) || DEFAULT_DATA;
 
-        // ==================== 2. 开屏逻辑 ====================
-        function openEnvelope() {
-            const env = document.getElementById('main-envelope');
-            env.classList.add('open');
-            setTimeout(() => {
-                document.getElementById('envelope-wrapper').style.transform = 'translateY(-100%)';
-                document.getElementById('envelope-wrapper').style.opacity = '0';
-                const main = document.getElementById('main-site');
-                main.style.display = 'block';
-                setTimeout(() => main.style.opacity = '1', 100);
-                initAll();
-            }, 1800);
+        // ==================== 数据初始化 ====================
+        function initData() {
+            // 如果没有本地数据，使用默认数据
+            if (!localStorage.getItem('blue_black_eternity')) {
+                localStorage.setItem('blue_black_eternity', JSON.stringify(DEFAULT_DATA));
+            }
         }
 
-        // ==================== 3. 核心功能 ====================
-        function initAll() {
-            startTimer();
+        // ==================== 渲染所有内容 ====================
+        function renderAll() {
             renderPhotos();
             renderTimeline();
             renderWishes();
             renderCapsules();
+            updateWishProgress();
         }
 
-        function startTimer() {
-            const update = () => {
-                const diff = new Date() - new Date(CONFIG.startDate);
-                const d = Math.floor(diff / 86400000);
-                document.getElementById('d').innerText = d.toString().padStart(3, '0');
-                document.getElementById('h').innerText = Math.floor((diff % 86400000) / 3600000).toString().padStart(2,'0');
-                document.getElementById('m').innerText = Math.floor((diff % 3600000) / 60000).toString().padStart(2,'0');
-                document.getElementById('s').innerText = Math.floor((diff % 60000) / 1000).toString().padStart(2,'0');
-                
-                const next = 520 - (d % 520);
-                document.getElementById('milestone-text').innerText = `✨ 距离下一次“520天”仪式感还剩 ${next} 天`;
-            }
-            setInterval(update, 1000); update();
-        }
-
+        // 渲染照片墙 - 电影胶片风格
         function renderPhotos() {
-            document.getElementById('photo-render').innerHTML = db.photos.map(p => `
-                <div class="polaroid" style="--r:${(Math.random()-0.5)*10}deg">
-                    <img src="${p.url}">
-                    <p>${p.note}</p>
-                </div>
-            `).join('');
-        }
-
-        function renderTimeline() {
-            document.getElementById('timeline-render').innerHTML = db.moments.sort((a,b)=>new Date(b.date)-new Date(a.date)).map(m => `
-                <div class="timeline-item">
-                    <div class="timeline-content">
-                        <span class="timeline-date">${m.date}</span>
-                        <h4>${m.title}</h4>
-                        <p style="font-size:14px; opacity:0.7; margin-top:10px;">${m.text}</p>
+            const gallery = document.getElementById('photoGallery');
+            if (!gallery) return;
+            
+            gallery.innerHTML = appData.photos.map(photo => `
+                <div class="film-frame">
+                    <img src="${photo.url}" alt="${photo.note}" class="film-img" loading="lazy">
+                    <div class="film-caption">
+                        <div class="film-date">${photo.date}</div>
+                        <h4>${photo.note}</h4>
                     </div>
                 </div>
             `).join('');
+            
+            // 复制照片以创建无限滚动效果
+            const filmStrip = document.querySelector('.film-strip');
+            filmStrip.innerHTML += filmStrip.innerHTML;
         }
 
-        function renderCapsules() {
-            const now = new Date();
-            document.getElementById('capsule-render').innerHTML = db.capsules.map((c, i) => {
-                const isLocked = new Date(c.unlock) > now;
+        // 渲染时间轴
+        function renderTimeline() {
+            const timeline = document.getElementById('timelineContainer');
+            if (!timeline) return;
+            
+            // 按日期排序
+            const sortedMoments = [...appData.moments].sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            timeline.innerHTML = sortedMoments.map((moment, index) => {
+                const isEven = index % 2 === 0;
                 return `
-                    <div class="t-card" style="margin-bottom:20px; cursor:${isLocked?'not-allowed':'pointer'}" onclick="readCapsule(${i})">
-                        <span style="font-size:24px;">${isLocked?'🔒':'✉️'}</span>
-                        <h4 style="display:inline; margin-left:10px;">${c.title}</h4>
-                        <p style="font-size:12px; opacity:0.4; margin-top:5px;">解封日期: ${c.unlock}</p>
+                    <div class="timeline-item">
+                        <div class="timeline-content">
+                            <span class="timeline-date">${moment.date}</span>
+                            <h3 class="timeline-title">${moment.title}</h3>
+                            <p class="timeline-text">${moment.text}</p>
+                        </div>
                     </div>
                 `;
             }).join('');
         }
 
+        // 渲染愿望清单（带勾选功能）
         function renderWishes() {
-            document.getElementById('wish-render').innerHTML = db.wishes.map(w => `
-                <div style="padding:15px; border-bottom:1px dashed #eee;">
-                    <span style="color:var(--deep-rose);">♥</span> ${w}
+            const wishList = document.getElementById('wishList');
+            if (!wishList) return;
+            
+            wishList.innerHTML = appData.wishes.map((wish, index) => `
+                <div class="wish-item" onclick="toggleWish(${index})">
+                    <input type="checkbox" class="wish-checkbox" ${wish.checked ? 'checked' : ''} onclick="event.stopPropagation(); toggleWish(${index})">
+                    <span class="wish-text ${wish.checked ? 'checked' : ''}">${wish.text}</span>
                 </div>
             `).join('');
+            
+            updateWishProgress();
         }
 
-        // ==================== 4. 读信特效逻辑 ====================
-        function readCapsule(index) {
-            const capsule = db.capsules[index];
-            if (new Date(capsule.unlock) > new Date()) {
-                alert("还没到开启时间哦，这是一份未来的惊喜~");
+        // 更新愿望进度
+        function updateWishProgress() {
+            if (appData.wishes.length === 0) return;
+            
+            const checkedCount = appData.wishes.filter(wish => wish.checked).length;
+            const totalCount = appData.wishes.length;
+            const percentage = Math.round((checkedCount / totalCount) * 100);
+            
+            document.getElementById('progress-percentage').textContent = `${percentage}%`;
+            document.getElementById('progress-fill').style.width = `${percentage}%`;
+        }
+
+        // 切换愿望勾选状态
+        function toggleWish(index) {
+            appData.wishes[index].checked = !appData.wishes[index].checked;
+            localStorage.setItem('blue_black_eternity', JSON.stringify(appData));
+            renderWishes();
+        }
+
+        // 渲染时光胶囊
+        function renderCapsules() {
+            const capsuleList = document.getElementById('capsuleList');
+            if (!capsuleList) return;
+            
+            const now = new Date();
+            capsuleList.innerHTML = appData.capsules.map((capsule, index) => {
+                const isLocked = new Date(capsule.unlock) > now;
+                return `
+                    <div class="capsule-item" onclick="openCapsule(${index})">
+                        <div class="capsule-date">
+                            ${isLocked ? '<i class="fas fa-lock"></i>' : '<i class="fas fa-envelope-open"></i>'}
+                            ${isLocked ? '解锁日期: ' : '已解锁: '}${capsule.unlock}
+                        </div>
+                        <h4 class="capsule-title">${capsule.title}</h4>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // ==================== 计时器功能 ====================
+        function startTimer() {
+            const updateTimer = () => {
+                const now = new Date();
+                const start = new Date(CONFIG.startDate);
+                const diff = now - start;
+                
+                // 计算天、时、分、秒
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                // 更新显示
+                document.getElementById('days').textContent = days.toString().padStart(3, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+                
+                // 计算距离下一个520天里程碑
+                const nextMilestone = 520 - (days % 520);
+                document.getElementById('milestone-text').textContent = `距离下一个"520天"纪念日还有 ${nextMilestone} 天`;
+            };
+            
+            updateTimer();
+            setInterval(updateTimer, 1000);
+        }
+
+        // ==================== 管理功能 ====================
+        function showAdmin() {
+            const password = prompt('请输入管理密码:');
+            if (password === CONFIG.password) {
+                document.getElementById('adminModal').style.display = 'flex';
+                // 重置表单
+                document.getElementById('adminForm').reset();
+                toggleFields();
+            } else if (password !== null) {
+                alert('密码错误！');
+            }
+        }
+
+        function hideAdmin() {
+            document.getElementById('adminModal').style.display = 'none';
+        }
+
+        function toggleFields() {
+            const dataType = document.getElementById('dataType').value;
+            const dateGroup = document.getElementById('dateGroup');
+            const contentGroup = document.getElementById('contentGroup');
+            const contentLabel = document.getElementById('contentLabel');
+            
+            if (dataType === 'photo') {
+                dateGroup.style.display = 'block';
+                contentGroup.style.display = 'block';
+                contentLabel.textContent = '照片地址';
+                document.getElementById('content').placeholder = '请输入照片URL地址';
+            } else if (dataType === 'moment') {
+                dateGroup.style.display = 'block';
+                contentGroup.style.display = 'block';
+                contentLabel.textContent = '事件描述';
+                document.getElementById('content').placeholder = '请输入事件的详细描述';
+            } else if (dataType === 'capsule') {
+                dateGroup.style.display = 'block';
+                contentGroup.style.display = 'block';
+                contentLabel.textContent = '胶囊内容';
+                document.getElementById('content').placeholder = '请输入时光胶囊的内容';
+            } else if (dataType === 'wish') {
+                dateGroup.style.display = 'none';
+                contentGroup.style.display = 'none';
+            }
+        }
+
+        function saveData() {
+            const dataType = document.getElementById('dataType').value;
+            const title = document.getElementById('title').value.trim();
+            const date = document.getElementById('date').value;
+            const content = document.getElementById('content').value.trim();
+            
+            // 验证输入
+            if (!title) {
+                alert('请输入标题/描述！');
                 return;
             }
             
-            const content = capsule.content.split('\n').map(line => `<p style="margin-bottom:30px;">${line}</p>`).join('');
-            document.getElementById('credits-content').innerHTML = `
-                <h1 style="font-size:3rem; color:var(--deep-rose); margin-bottom:100px;">${capsule.title}</h1>
-                ${content}
-                <div style="margin-top:200px; font-family:'Dancing Script'; font-size:2rem;">To Be Continued...</div>
-            `;
+            if (dataType !== 'wish' && !date) {
+                alert('请选择日期！');
+                return;
+            }
             
-            const reader = document.getElementById('movie-reader');
-            reader.style.display = 'flex';
+            if (dataType !== 'wish' && !content) {
+                alert('请输入内容！');
+                return;
+            }
+            
+            // 保存数据
+            if (dataType === 'photo') {
+                appData.photos.push({
+                    url: content,
+                    note: title,
+                    date: date
+                });
+            } else if (dataType === 'moment') {
+                appData.moments.push({
+                    date: date,
+                    title: title,
+                    text: content
+                });
+            } else if (dataType === 'capsule') {
+                appData.capsules.push({
+                    unlock: date,
+                    title: title,
+                    content: content
+                });
+            } else if (dataType === 'wish') {
+                appData.wishes.push({
+                    text: title,
+                    checked: false
+                });
+            }
+            
+            // 保存到本地存储
+            localStorage.setItem('blue_black_eternity', JSON.stringify(appData));
+            
+            // 重新渲染页面
+            renderAll();
+            
+            // 隐藏模态框
+            hideAdmin();
+            
+            alert('保存成功！');
         }
 
-        function closeReader() {
-            document.getElementById('movie-reader').style.display = 'none';
+        // ==================== 时光胶囊功能 ====================
+        function openCapsule(index) {
+            const capsule = appData.capsules[index];
+            const now = new Date();
+            
+            if (new Date(capsule.unlock) > now) {
+                alert('还没到开启时间哦，这是一份未来的惊喜~');
+                return;
+            }
+            
+            // 显示胶囊内容
+            document.getElementById('capsuleReaderTitle').textContent = capsule.title;
+            document.getElementById('capsuleReaderDate').textContent = capsule.unlock;
+            document.getElementById('capsuleReaderContent').textContent = capsule.content;
+            
+            // 显示阅读器
+            document.getElementById('capsuleReader').style.display = 'flex';
         }
 
-        // ==================== 5. 管理后台逻辑 ====================
-        function showAdmin() {
-            if(prompt("暗号") === CONFIG.pwd) document.getElementById('admin-modal').style.display = 'flex';
-        }
-        function hideAdmin() { document.getElementById('admin-modal').style.display = 'none'; }
-
-        function saveData() {
-            const type = document.getElementById('data-type').value;
-            const title = document.getElementById('ipt-title').value;
-            const content = document.getElementById('ipt-content').value;
-            const date = document.getElementById('ipt-date').value;
-
-            if (type === 'photo') db.photos.push({ url: content, note: title });
-            if (type === 'moment') db.moments.push({ date, title, text: content });
-            if (type === 'capsule') db.capsules.push({ unlock: date, title, content });
-
-            localStorage.setItem('love_eternity', JSON.stringify(db));
-            location.reload();
+        function closeCapsule() {
+            document.getElementById('capsuleReader').style.display = 'none';
         }
 
+        // ==================== 页面滚动效果 ====================
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.4)';
+                header.style.padding = '15px 40px';
+                header.style.backgroundColor = 'rgba(10, 25, 47, 0.95)';
+            } else {
+                header.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+                header.style.padding = '22px 40px';
+                header.style.backgroundColor = 'rgba(10, 25, 47, 0.92)';
+            }
+            
+            // 添加滚动动画
+            const elements = document.querySelectorAll('.film-frame, .timeline-content, .feature-card');
+            elements.forEach(element => {
+                const position = element.getBoundingClientRect();
+                if (position.top < window.innerHeight - 100) {
+                    element.style.opacity = '1';
+                    element.style.transform = element.style.transform.replace('translateY(20px)', 'translateY(0)');
+                }
+            });
+        });
+
+        // 初始化元素动画状态
+        document.querySelectorAll('.film-frame, .timeline-content, .feature-card').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        });
+        
+        // 初始触发一次滚动效果
+        setTimeout(() => {
+            window.dispatchEvent(new Event('scroll'));
+        }, 500);
     </script>
 </body>
 </html>
