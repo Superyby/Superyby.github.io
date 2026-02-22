@@ -2,718 +2,1740 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>我的个人博客</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Our Love Story | 属于我们的时光</title>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+SC:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* ==================== 全局变量 ==================== */
         :root {
-            --primary: #4361ee;
-            --secondary: #3f37c9;
-            --accent: #4895ef;
-            --dark: #212529;
-            --light: #f8f9fa;
-            --gray: #6c757d;
-            --light-gray: #e9ecef;
-            --transition: all 0.3s ease;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --shadow-hover: 0 6px 12px rgba(0, 0, 0, 0.15);
-            --border-radius: 8px;
+            --primary: #ff758c;
+            --primary-light: #ff9a9e;
+            --secondary: #a18cd1;
+            --accent: #fbc2eb;
+            --deep: #2d3436;
+            --text-main: #4a4a4a;
+            --text-light: #888;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --shadow-soft: 0 10px 40px -10px rgba(255, 117, 140, 0.3);
+            --shadow-strong: 0 20px 60px -15px rgba(161, 140, 209, 0.4);
+            --radius-xl: 30px;
+            --radius-lg: 24px;
+            --radius-md: 16px;
+            --radius-sm: 10px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            -webkit-tap-highlight-color: transparent;
         }
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        html { scroll-behavior: smooth; }
         
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: var(--dark);
-            background-color: #f9f9f9;
-            padding-top: 60px;
+            font-family: 'Quicksand', 'Noto Serif SC', sans-serif;
+            background: linear-gradient(135deg, #fff5f7 0%, #ffe6eb 50%, #f8e1f0 100%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            min-height: 100vh;
+            position: relative;
+            line-height: 1.7;
         }
-        
-        a {
-            text-decoration: none;
-            color: var(--primary);
+
+        /* ==================== 动态背景 ==================== */
+        #bg-canvas {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .floating-shapes {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .shape {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            opacity: 0.1;
+            animation: float 20s infinite ease-in-out;
+        }
+
+        .shape:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
+        .shape:nth-child(2) { width: 200px; height: 200px; top: 60%; left: 80%; animation-delay: -5s; }
+        .shape:nth-child(3) { width: 150px; height: 150px; top: 80%; left: 20%; animation-delay: -10s; }
+        .shape:nth-child(4) { width: 250px; height: 250px; top: 30%; left: 70%; animation-delay: -15s; }
+
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            25% { transform: translate(30px, -30px) rotate(90deg); }
+            50% { transform: translate(-20px, 20px) rotate(180deg); }
+            75% { transform: translate(20px, 30px) rotate(270deg); }
+        }
+
+        /* ==================== 加载动画 ==================== */
+        #loader {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #ff758c 0%, #fbc2eb 100%);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            transition: opacity 1s ease, visibility 1s;
+        }
+
+        .loader-heart {
+            font-size: 70px;
+            animation: heartbeat 1.2s infinite;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+        }
+
+        .loader-text {
+            margin-top: 25px;
+            font-family: 'Dancing Script', cursive;
+            font-size: 28px;
+            color: #fff;
+            letter-spacing: 3px;
+            opacity: 0;
+            animation: fadeIn 1s forwards 0.5s;
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 4px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+            margin-top: 20px;
+            overflow: hidden;
+        }
+
+        .loader-progress {
+            height: 100%;
+            background: #fff;
+            width: 0;
+            animation: loading 2s ease-in-out forwards;
+        }
+
+        @keyframes loading { to { width: 100%; } }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        #loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* ==================== 导航栏 ==================== */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(255,255,255,0.5);
+            border-bottom: 1px solid var(--glass-border);
             transition: var(--transition);
         }
-        
-        a:hover {
-            color: var(--secondary);
+
+        nav.scrolled {
+            padding: 15px 40px;
+            background: rgba(255,255,255,0.8);
+            box-shadow: var(--shadow-soft);
         }
-        
+
+        .logo {
+            font-family: 'Dancing Script', cursive;
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--white);
+            border: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            font-size: 20px;
+            position: relative;
+        }
+
+        .nav-btn:hover {
+            transform: translateY(-3px) scale(1.1);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+        }
+
+        .music-disc {
+            animation: rotate 8s linear infinite;
+            animation-play-state: paused;
+        }
+
+        .music-disc.playing {
+            animation-play-state: running;
+        }
+
+        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+        /* ==================== 通用组件 ==================== */
         .container {
-            width: 100%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 20px;
+            padding: 0 25px;
         }
-        
-        /* Header Styling */
-        header {
+
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .section-title {
+            font-size: 3rem;
+            color: var(--deep);
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '✦';
+            display: block;
+            font-size: 24px;
+            color: var(--primary);
+            margin-top: 10px;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        .btn {
+            padding: 14px 35px;
+            border-radius: 50px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            box-shadow: 0 5px 20px rgba(255, 117, 140, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.6);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        /* ==================== Hero 区域 ==================== */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding-top: 100px;
+            position: relative;
+        }
+
+        .hero-couple {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.3s;
+        }
+
+        .couple-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 40px;
+            box-shadow: var(--shadow-strong);
+            border: 4px solid #fff;
+        }
+
+        .couple-heart {
+            font-size: 50px;
+            animation: heartbeat 1s infinite;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            color: var(--deep);
+            margin-bottom: 20px;
+            line-height: 1.2;
+            font-family: 'Noto Serif SC', serif;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.5s;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-light);
+            margin-bottom: 50px;
+            max-width: 600px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.7s;
+        }
+
+        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* ==================== 计时器卡片 ==================== */
+        .timer-card {
+            background: var(--glass);
+            backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            padding: 50px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-strong);
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1s forwards 0.9s;
+            max-width: 90%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .timer-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent,
+                rgba(255, 117, 140, 0.1),
+                transparent
+            );
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+        }
+
+        .timer-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 100px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .timer-num {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Quicksand', sans-serif;
+            line-height: 1;
+        }
+
+        .timer-label {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-top: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+
+        /* ==================== 照片库（带分类） ==================== */
+        .gallery-filters {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 50px;
+        }
+
+        .filter-btn {
+            padding: 10px 25px;
+            border-radius: 50px;
+            border: 2px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: inherit;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #fff;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .photo-item {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .photo-item.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .photo-item:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .photo-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .photo-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 20px;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: #fff;
+            transform: translateY(100%);
+            transition: var(--transition);
+        }
+
+        .photo-item:hover .photo-overlay {
+            transform: translateY(0);
+        }
+
+        .photo-date {
+            font-size: 0.85rem;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .photo-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .photo-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--primary);
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ==================== 时间轴 ==================== */
+        .timeline {
+            position: relative;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
+            transform: translateX(-50%);
+            border-radius: 3px;
+            box-shadow: 0 0 20px rgba(255, 117, 140, 0.5);
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: flex-end;
+            padding-bottom: 60px;
+            position: relative;
+            width: 50%;
+            opacity: 0;
+            transform: translateX(-60px);
+            transition: all 0.8s ease;
+        }
+
+        .timeline-item:nth-child(even) {
+            align-self: flex-end;
+            justify-content: flex-start;
+            margin-left: 50%;
+            transform: translateX(60px);
+        }
+
+        .timeline-item.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .timeline-dot {
+            position: absolute;
+            right: -12px;
+            top: 0;
+            width: 24px;
+            height: 24px;
+            background: var(--white);
+            border: 4px solid var(--primary);
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 0 0 6px rgba(255, 117, 140, 0.2);
+            transition: var(--transition);
+        }
+
+        .timeline-item:hover .timeline-dot {
+            transform: scale(1.3);
+            box-shadow: 0 0 0 10px rgba(255, 117, 140, 0.3);
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -12px;
+            right: auto;
+        }
+
+        .timeline-content {
+            background: var(--white);
+            padding: 35px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-soft);
+            width: 92%;
+            position: relative;
+            transition: var(--transition);
+            border: 1px solid var(--glass-border);
+        }
+
+        .timeline-content:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-strong);
+        }
+
+        .timeline-date {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary-light), var(--accent));
+            color: #fff;
+            padding: 6px 18px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .timeline-title {
+            font-size: 1.5rem;
+            color: var(--deep);
+            margin-bottom: 12px;
+            font-family: 'Noto Serif SC', serif;
+            font-weight: 700;
+        }
+
+        .timeline-desc {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.8;
+        }
+
+        /* ==================== 管理面板 ==================== */
+        .admin-panel {
+            display: none;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background-color: white;
-            box-shadow: var(--shadow);
-            z-index: 1000;
-            padding: 15px 0;
-        }
-        
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .logo {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--primary);
-        }
-        
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-        
-        .nav-links a {
-            font-weight: 500;
-            position: relative;
-        }
-        
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: var(--transition);
-        }
-        
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-        
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, #4361ee 0%, #3a0ca3 100%);
-            color: white;
-            padding: 100px 0;
-            text-align: center;
-            margin-bottom: 60px;
-            border-radius: 0 0 20px 20px;
-        }
-        
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 20px;
-            font-weight: 800;
-        }
-        
-        .hero p {
-            font-size: 1.5rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            opacity: 0.9;
-        }
-        
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-        }
-        
-        .btn:hover {
-            background-color: #3a0ca3;
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
-            color: white;
-        }
-        
-        /* Blog Section */
-        .section-title {
-            text-align: center;
-            margin-bottom: 50px;
-            font-size: 2.5rem;
-            color: var(--dark);
-            position: relative;
-        }
-        
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent);
-            border-radius: 2px;
-        }
-        
-        .blog-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-            gap: 40px;
-            margin-bottom: 60px;
-        }
-        
-        .blog-card {
-            background-color: white;
-            border-radius: var(--border-radius);
-            overflow: hidden;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-        
-        .blog-card:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .card-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        
-        .card-img img {
-            width: 100%;
             height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .blog-card:hover .card-img img {
-            transform: scale(1.1);
-        }
-        
-        .card-content {
-            padding: 25px;
-        }
-        
-        .card-meta {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 15px;
-            color: var(--gray);
-            font-size: 0.9rem;
-        }
-        
-        .card-meta span i {
-            margin-right: 5px;
-        }
-        
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 15px;
-            color: var(--dark);
-        }
-        
-        .card-excerpt {
-            margin-bottom: 20px;
-            color: var(--gray);
-        }
-        
-        .read-more {
-            display: inline-flex;
-            align-items: center;
-            gap: 5px;
-            font-weight: 600;
-            color: var(--accent);
-        }
-        
-        .read-more:hover {
-            gap: 10px;
-        }
-        
-        /* About Section */
-        .about {
-            background-color: var(--light);
-            padding: 80px 0;
-        }
-        
-        .about-content {
-            display: flex;
-            align-items: center;
-            gap: 60px;
-        }
-        
-        .about-text {
-            flex: 1;
-        }
-        
-        .about-text h2 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            color: var(--dark);
-        }
-        
-        .about-text p {
-            margin-bottom: 20px;
-            font-size: 1.1rem;
-        }
-        
-        .skills {
-            margin-top: 30px;
-        }
-        
-        .skill {
-            margin-bottom: 15px;
-        }
-        
-        .skill-name {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-        }
-        
-        .skill-bar {
-            height: 10px;
-            background-color: var(--light-gray);
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        
-        .skill-level {
-            height: 100%;
-            background-color: var(--accent);
-            border-radius: 5px;
-        }
-        
-        .about-image {
-            flex: 1;
-            text-align: center;
-        }
-        
-        .avatar {
-            width: 280px;
-            height: 280px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--accent);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        /* Contact Section */
-        .contact {
-            padding: 80px 0;
-            background-color: white;
-        }
-        
-        .contact-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 30px;
-            margin-bottom: 60px;
-        }
-        
-        .contact-card {
-            background-color: var(--light);
-            border-radius: var(--border-radius);
-            padding: 30px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            transition: var(--transition);
-        }
-        
-        .contact-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
-        }
-        
-        .contact-icon {
-            font-size: 2.5rem;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
-        
-        .contact-info {
-            margin-top: 10px;
-        }
-        
-        /* Footer */
-        footer {
-            background-color: var(--dark);
-            color: white;
-            padding: 60px 0 30px;
-        }
-        
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        
-        .footer-section h3 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 10px;
-        }
-        
-        .footer-section h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 3px;
-            background-color: var(--accent);
-        }
-        
-        .footer-links {
-            list-style: none;
-        }
-        
-        .footer-links li {
-            margin-bottom: 12px;
-        }
-        
-        .footer-links a {
-            color: #adb5bd;
-        }
-        
-        .footer-links a:hover {
-            color: var(--accent);
-            padding-left: 5px;
-        }
-        
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-        
-        .social-links a {
-            display: flex;
-            align-items: center;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
             justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .admin-panel.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .admin-modal {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            transform: scale(0.9) translateY(20px);
+            transition: var(--transition);
+        }
+
+        .admin-panel.active .admin-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .admin-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background-color: #343a40;
-            color: white;
+            background: #f5f5f5;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .admin-close:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        .admin-title {
+            font-size: 1.8rem;
+            color: var(--deep);
+            margin-bottom: 30px;
+            font-family: 'Noto Serif SC', serif;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--deep);
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #eee;
+            border-radius: var(--radius-md);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: var(--transition);
+            background: #fafafa;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(255, 117, 140, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .file-upload {
+            border: 2px dashed var(--primary);
+            border-radius: var(--radius-md);
+            padding: 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            background: #fafafa;
+        }
+
+        .file-upload:hover {
+            background: rgba(255, 117, 140, 0.05);
+        }
+
+        .file-upload-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .file-upload-text {
+            color: var(--text-light);
+        }
+
+        .preview-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .preview-item {
+            position: relative;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            aspect-ratio: 1;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        /* ==================== 照片灯箱 ==================== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
             transition: var(--transition);
         }
-        
-        .social-links a:hover {
-            background-color: var(--accent);
-            transform: translateY(-3px);
+
+        .lightbox.active {
+            opacity: 1;
+            visibility: visible;
         }
-        
-        .copyright {
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            position: relative;
+        }
+
+        .lightbox-content img {
+            max-width: 100%;
+            max-height: 85vh;
+            border-radius: var(--radius-md);
+            box-shadow: 0 0 50px rgba(255, 117, 140, 0.3);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 40px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .lightbox-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        .lightbox-info {
+            color: #fff;
             text-align: center;
-            padding-top: 30px;
-            border-top: 1px solid #343a40;
-            color: #6c757d;
+            margin-top: 20px;
+        }
+
+        .lightbox-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .lightbox-date {
             font-size: 0.9rem;
+            opacity: 0.7;
         }
-        
-        /* Responsive Design */
-        @media (max-width: 992px) {
-            .about-content {
-                flex-direction: column-reverse;
-            }
-            
-            .hero h1 {
-                font-size: 2.8rem;
-            }
+
+        /* ==================== 密码验证 ==================== */
+        .password-modal {
+            background: var(--white);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 400px;
+            padding: 40px;
+            text-align: center;
         }
-        
+
+        .password-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .password-title {
+            font-size: 1.5rem;
+            color: var(--deep);
+            margin-bottom: 10px;
+        }
+
+        .password-desc {
+            color: var(--text-light);
+            margin-bottom: 25px;
+        }
+
+        /* ==================== 页脚 ==================== */
+        footer {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            background: rgba(255,255,255,0.5);
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-heart {
+            color: var(--primary);
+            display: inline-block;
+            animation: heartbeat 1.5s infinite;
+            font-size: 1.2rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        /* ==================== 响应式 ==================== */
         @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                gap: 20px;
-            }
+            nav { padding: 15px 20px; }
+            .logo { font-size: 26px; }
             
-            .nav-links {
-                gap: 15px;
-            }
+            .hero-couple { gap: 15px; }
+            .couple-avatar { width: 70px; height: 70px; font-size: 30px; }
+            .couple-heart { font-size: 35px; }
             
-            .hero {
-                padding: 80px 0;
-            }
+            .hero h1 { font-size: 2.5rem; }
+            .hero p { font-size: 1.1rem; }
             
-            .hero h1 {
-                font-size: 2.3rem;
-            }
+            .timer-card { padding: 30px 20px; gap: 20px; }
+            .timer-num { font-size: 2.5rem; }
             
-            .hero p {
-                font-size: 1.2rem;
-            }
+            .section-title { font-size: 2.2rem; }
+            section { padding: 80px 0; }
             
-            .section-title {
-                font-size: 2rem;
+            .timeline::before { left: 20px; }
+            .timeline-item,
+            .timeline-item:nth-child(even) {
+                width: 100%;
+                margin-left: 0;
+                justify-content: flex-start;
+                padding-left: 55px;
+                transform: none !important;
+                opacity: 0;
             }
+            .timeline-item.visible { opacity: 1; }
+            .timeline-dot { left: 8px !important; right: auto !important; }
+            
+            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+            
+            .admin-modal { padding: 30px 20px; }
         }
-        
-        @media (max-width: 576px) {
-            .nav-links {
-                flex-wrap: wrap;
-                justify-content: center;
-            }
-            
-            .hero {
-                padding: 60px 0;
-            }
-            
-            .hero h1 {
-                font-size: 1.8rem;
-            }
-            
-            .blog-grid {
-                grid-template-columns: 1fr;
-            }
-        }
+
+        /* ==================== 工具类 ==================== */
+        .hidden { display: none !important; }
+        .text-center { text-align: center; }
+        .mt-20 { margin-top: 20px; }
+        .mb-20 { margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="#" class="logo">DevBlog</a>
-                <div class="nav-links">
-                    <a href="#">首页</a>
-                    <a href="#blog">博客</a>
-                    <a href="#about">关于</a>
-                    <a href="#contact">联系</a>
-                </div>
-            </nav>
-        </div>
-    </header>
+    <!-- 背景元素 -->
+    <canvas id="bg-canvas"></canvas>
+    <div class="floating-shapes">
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+        <div class="shape"></div>
+    </div>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="container">
-            <h1>欢迎来到我的个人博客</h1>
-            <p>记录技术学习心得，分享开发经验，探索编程世界</p>
-            <a href="#blog" class="btn">浏览文章</a>
+    <!-- 加载动画 -->
+    <div id="loader">
+        <div class="loader-heart">💕</div>
+        <div class="loader-text">Loading Our Story...</div>
+        <div class="loader-bar">
+            <div class="loader-progress"></div>
         </div>
-    </section>
+    </div>
 
-    <!-- Blog Section -->
-    <section id="blog" class="container">
-        <h2 class="section-title">最新文章</h2>
-        <div class="blog-grid">
-            <article class="blog-card">
-                <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="GitHub Pages">
-                </div>
-                <div class="card-content">
-                    <div class="card-meta">
-                        <span><i class="far fa-calendar"></i> 2023-07-15</span>
-                        <span><i class="far fa-folder"></i> GitHub</span>
-                    </div>
-                    <h3 class="card-title">如何在GitHub Pages上创建免费博客</h3>
-                    <p class="card-excerpt">GitHub Pages提供了一个简单而强大的方式来托管静态网站。本文将逐步指导您如何创建和部署您的个人博客。</p>
-                    <a href="#" class="read-more">阅读更多 <i class="fas fa-arrow-right"></i></a>
-                </div>
-            </article>
+    <!-- 导航栏 -->
+    <nav id="navbar">
+        <a href="#" class="logo">Us & Forever</a>
+        <div class="nav-right">
+            <button class="nav-btn music-disc" id="musicBtn" title="播放音乐">🎵</button>
+            <button class="nav-btn" id="adminBtn" title="管理内容">⚙️</button>
+        </div>
+        <audio id="bgMusic" loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+        </audio>
+    </nav>
+
+    <!-- 主内容 -->
+    <div id="main-content">
+        <!-- Hero 区域 -->
+        <section class="hero container">
+            <div class="hero-couple">
+                <div class="couple-avatar">👦</div>
+                <div class="couple-heart">💖</div>
+                <div class="couple-avatar">👧</div>
+            </div>
+            <h1>星河滚滚 · 你是人间理想</h1>
+            <p>从相遇的那一刻起，时间便有了意义。这里记录着我们相爱的每一个瞬间。</p>
             
-            <article class="blog-card">
-                <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1624953587687-daf255b6b80a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80" alt="HTML & CSS">
+            <div class="timer-card">
+                <div class="timer-item">
+                    <span class="timer-num" id="days">0</span>
+                    <span class="timer-label">天</span>
                 </div>
-                <div class="card-content">
-                    <div class="card-meta">
-                        <span><i class="far fa-calendar"></i> 2023-07-10</span>
-                        <span><i class="far fa-folder"></i> Web开发</span>
-                    </div>
-                    <h3 class="card-title">现代CSS布局技巧与响应式设计</h3>
-                    <p class="card-excerpt">了解最新的CSS布局技术，包括Flexbox、Grid和Container Queries，创建在各种设备上都能完美展示的响应式网站。</p>
-                    <a href="#" class="read-more">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                <div class="timer-item">
+                    <span class="timer-num" id="hours">0</span>
+                    <span class="timer-label">时</span>
                 </div>
-            </article>
-            
-            <article class="blog-card">
-                <div class="card-img">
-                    <img src="https://images.unsplash.com/photo-1571171637578-41bc2dd41cd2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="JavaScript">
+                <div class="timer-item">
+                    <span class="timer-num" id="minutes">0</span>
+                    <span class="timer-label">分</span>
                 </div>
-                <div class="card-content">
-                    <div class="card-meta">
-                        <span><i class="far fa-calendar"></i> 2023-07-05</span>
-                        <span><i class="far fa-folder"></i> JavaScript</span>
-                    </div>
-                    <h3 class="card-title">JavaScript异步编程模式：从回调到Async/Await</h3>
-                    <p class="card-excerpt">深入探讨JavaScript的异步编程发展历程，掌握如何有效使用Promise和Async/Await管理复杂的异步操作。</p>
-                    <a href="#" class="read-more">阅读更多 <i class="fas fa-arrow-right"></i></a>
+                <div class="timer-item">
+                    <span class="timer-num" id="seconds">0</span>
+                    <span class="timer-label">秒</span>
                 </div>
-            </article>
-        </div>
-    </section>
+            </div>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">关于我</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>你好！我是李开发者</h2>
-                    <p>一位专注于前端开发和用户体验的软件工程师，拥有超过5年的Web开发经验。我热衷于创建高性能、用户友好的网站和应用。</p>
-                    <p>在日常工作中，我主要使用React、Vue和现代JavaScript生态系统，同时也在探索Node.js后端开发。</p>
-                    <p>在我的博客中，我将分享编程技巧、开发心得以及行业最新动态，希望能帮助其他开发者在技术道路上成长。</p>
+        <!-- 照片库 -->
+        <section class="container" id="gallery">
+            <div class="section-header">
+                <h2 class="section-title">我们的相册</h2>
+                <p class="section-subtitle">每一张照片，都是值得珍藏的回忆</p>
+            </div>
+            
+            <div class="gallery-filters" id="galleryFilters">
+                <button class="filter-btn active" data-category="all">全部</button>
+                <button class="filter-btn" data-category="travel">旅行</button>
+                <button class="filter-btn" data-category="daily">日常</button>
+                <button class="filter-btn" data-category="celebration">纪念日</button>
+                <button class="filter-btn" data-category="other">其他</button>
+            </div>
+            
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- 照片由 JS 动态生成 -->
+            </div>
+        </section>
+
+        <!-- 时间轴 -->
+        <section class="container" id="timeline">
+            <div class="section-header">
+                <h2 class="section-title">爱情时间轴</h2>
+                <p class="section-subtitle">我们一起走过的每一步</p>
+            </div>
+            
+            <div class="timeline" id="timelineContainer">
+                <!-- 时间轴由 JS 动态生成 -->
+            </div>
+        </section>
+
+        <!-- 页脚 -->
+        <footer>
+            <div class="footer-links">
+                <a href="#gallery">相册</a>
+                <a href="#timeline">时间轴</a>
+                <a href="#" id="footerAdmin">管理</a>
+            </div>
+            <p>Made with <span class="footer-heart">❤</span> for You</p>
+            <p>© <span id="currentYear">2024</span> Our Love Story. All Rights Reserved.</p>
+        </footer>
+    </div>
+
+    <!-- 管理面板 -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-modal">
+            <button class="admin-close" onclick="closeAdmin()">&times;</button>
+            <h3 class="admin-title">内容管理</h3>
+            
+            <div class="form-group">
+                <label class="form-label">选择操作</label>
+                <select class="form-select" id="adminAction" onchange="toggleAdminForm()">
+                    <option value="photo">添加照片</option>
+                    <option value="event">添加事件</option>
+                    <option value="delete">删除内容</option>
+                </select>
+            </div>
+
+            <!-- 添加照片表单 -->
+            <div id="photoForm">
+                <div class="form-group">
+                    <label class="form-label">照片标题</label>
+                    <input type="text" class="form-input" id="photoTitle" placeholder="例如：第一次旅行">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">分类</label>
+                    <select class="form-select" id="photoCategory">
+                        <option value="travel">旅行</option>
+                        <option value="daily">日常</option>
+                        <option value="celebration">纪念日</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">日期</label>
+                    <input type="date" class="form-input" id="photoDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">上传照片</label>
+                    <div class="file-upload" onclick="document.getElementById('photoFile').click()">
+                        <span class="file-upload-icon">📷</span>
+                        <span class="file-upload-text">点击选择照片（支持多张）</span>
+                        <input type="file" id="photoFile" accept="image/*" multiple hidden onchange="handlePhotoPreview()">
+                    </div>
+                    <div class="preview-container" id="photoPreview"></div>
+                </div>
+                <button class="btn btn-primary" style="width: 100%" onclick="savePhoto()">💾 保存照片</button>
+            </div>
+
+            <!-- 添加事件表单 -->
+            <div id="eventForm" class="hidden">
+                <div class="form-group">
+                    <label class="form-label">事件标题</label>
+                    <input type="text" class="form-input" id="eventTitle" placeholder="例如：初次相遇">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">日期</label>
+                    <input type="date" class="form-input" id="eventDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">事件描述</label>
+                    <textarea class="form-textarea" id="eventDesc" placeholder="详细描述这个特别的日子..."></textarea>
+                </div>
+                <button class="btn btn-primary" style="width: 100%" onclick="saveEvent()">💾 保存事件</button>
+            </div>
+
+            <!-- 删除内容表单 -->
+            <div id="deleteForm" class="hidden">
+                <div class="form-group">
+                    <label class="form-label">选择要删除的内容</label>
+                    <select class="form-select" id="deleteType" onchange="updateDeleteList()">
+                        <option value="photo">照片</option>
+                        <option value="event">事件</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">选择具体项目</label>
+                    <select class="form-select" id="deleteSelect">
+                        <!-- 动态填充 -->
+                    </select>
+                </div>
+                <button class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #ff6b6b, #ee5a5a)" onclick="deleteContent()">🗑️ 确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 密码验证 -->
+    <div class="admin-panel" id="passwordPanel">
+        <div class="admin-modal password-modal">
+            <span class="password-icon">🔐</span>
+            <h3 class="password-title">管理员验证</h3>
+            <p class="password-desc">请输入管理密码</p>
+            <input type="password" class="form-input mb-20" id="adminPassword" placeholder="密码：1314" style="text-align: center; font-size: 1.2rem;">
+            <button class="btn btn-primary" style="width: 100%" onclick="verifyPassword()">🔓 验证</button>
+            <button class="btn btn-outline" style="width: 100%; margin-top: 15px" onclick="closePassword()">取消</button>
+        </div>
+    </div>
+
+    <!-- 照片灯箱 -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-content">
+            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
+            <img src="" alt="" id="lightboxImg">
+            <div class="lightbox-info">
+                <h3 class="lightbox-title" id="lightboxTitle"></h3>
+                <p class="lightbox-date" id="lightboxDate"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==================== 配置 ====================
+        const CONFIG = {
+            startDate: '2023-05-20', // 纪念日
+            adminPassword: '1314', // 管理密码
+            defaultPhotos: [
+                {
+                    id: 1,
+                    title: '初次相遇',
+                    category: 'daily',
+                    date: '2023-05-20',
+                    src: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600'
+                },
+                {
+                    id: 2,
+                    title: '第一次旅行',
+                    category: 'travel',
+                    date: '2023-08-15',
+                    src: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600'
+                },
+                {
+                    id: 3,
+                    title: '情人节惊喜',
+                    category: 'celebration',
+                    date: '2024-02-14',
+                    src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600'
+                },
+                {
+                    id: 4,
+                    title: '日常小确幸',
+                    category: 'daily',
+                    date: '2024-06-01',
+                    src: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=600'
+                },
+                {
+                    id: 5,
+                    title: '周年纪念',
+                    category: 'celebration',
+                    date: '2024-05-20',
+                    src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'
+                },
+                {
+                    id: 6,
+                    title: '海边日落',
+                    category: 'travel',
+                    date: '2024-07-10',
+                    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600'
+                }
+            ],
+            defaultEvents: [
+                {
+                    id: 1,
+                    title: '初次相遇',
+                    date: '2023-05-20',
+                    desc: '在那家街角的咖啡馆，阳光刚好洒在你的肩膀上。那一刻，我知道故事开始了。'
+                },
+                {
+                    id: 2,
+                    title: '第一次约会',
+                    date: '2023-06-01',
+                    desc: '一起去看电影，手心里全是汗，却舍不得放开。'
+                },
+                {
+                    id: 3,
+                    title: '第一次旅行',
+                    date: '2023-08-15',
+                    desc: '我们一起去了大理，在洱海边吹风。你说想一直这样走下去，我点了点头。'
+                },
+                {
+                    id: 4,
+                    title: '正式在一起',
+                    date: '2023-10-10',
+                    desc: '在漫天烟花下，我们确认了彼此的心意。从此，我的世界有了你。'
+                },
+                {
+                    id: 5,
+                    title: '第一个情人节',
+                    date: '2024-02-14',
+                    desc: '没有昂贵的礼物，只有亲手做的晚餐和满屋子的鲜花。平凡却最珍贵。'
+                },
+                {
+                    id: 6,
+                    title: '一周年纪念',
+                    date: '2024-05-20',
+                    desc: '一年前的今天，我们相遇。一年后的今天，我们更加相爱。'
+                }
+            ]
+        };
+
+        // ==================== 全局变量 ====================
+        let photos = [];
+        let events = [];
+        let uploadedPhotos = [];
+        let currentFilter = 'all';
+        let isAdmin = false;
+
+        // ==================== 初始化 ====================
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                initData();
+                initTimer();
+                initGallery();
+                initTimeline();
+                initParticles();
+                initScrollEffects();
+                document.getElementById('currentYear').textContent = new Date().getFullYear();
+            }, 2500);
+        });
+
+        // ==================== 数据管理 ====================
+        function initData() {
+            // 加载照片
+            const savedPhotos = localStorage.getItem('lovePhotos');
+            if (savedPhotos) {
+                photos = JSON.parse(savedPhotos);
+            } else {
+                photos = [...CONFIG.defaultPhotos];
+                saveData();
+            }
+
+            // 加载事件
+            const savedEvents = localStorage.getItem('loveEvents');
+            if (savedEvents) {
+                events = JSON.parse(savedEvents);
+            } else {
+                events = [...CONFIG.defaultEvents];
+                saveData();
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('lovePhotos', JSON.stringify(photos));
+            localStorage.setItem('loveEvents', JSON.stringify(events));
+        }
+
+        // ==================== 计时器 ====================
+        function initTimer() {
+            function update() {
+                const startDate = new Date(CONFIG.startDate);
+                const now = new Date();
+                const diff = now - startDate;
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').innerText = days;
+                document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
+            }
+            setInterval(update, 1000);
+            update();
+        }
+
+        // ==================== 音乐控制 ====================
+        const musicBtn = document.getElementById('musicBtn');
+        const bgMusic = document.getElementById('bgMusic');
+        let isPlaying = false;
+
+        musicBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                bgMusic.pause();
+                musicBtn.classList.remove('playing');
+            } else {
+                bgMusic.play();
+                musicBtn.classList.add('playing');
+            }
+            isPlaying = !isPlaying;
+        });
+
+        // ==================== 画廊功能 ====================
+        function initGallery() {
+            renderGallery();
+            
+            // 分类过滤
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    currentFilter = btn.dataset.category;
+                    renderGallery();
+                });
+            });
+        }
+
+        function renderGallery() {
+            const grid = document.getElementById('galleryGrid');
+            const filtered = currentFilter === 'all' 
+                ? photos 
+                : photos.filter(p => p.category === currentFilter);
+            
+            grid.innerHTML = filtered.map((photo, index) => `
+                <div class="photo-item" style="transition-delay: ${index * 0.1}s" onclick="openLightbox(${photo.id})">
+                    <img src="${photo.src}" alt="${photo.title}" loading="lazy">
+                    <span class="photo-category">${getCategoryName(photo.category)}</span>
+                    <div class="photo-overlay">
+                        <div class="photo-date">📅 ${photo.date}</div>
+                        <div class="photo-title">${photo.title}</div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 触发动画
+            setTimeout(() => {
+                document.querySelectorAll('.photo-item').forEach(item => {
+                    item.classList.add('visible');
+                });
+            }, 100);
+        }
+
+        function getCategoryName(cat) {
+            const names = {
+                travel: '旅行',
+                daily: '日常',
+                celebration: '纪念日',
+                other: '其他'
+            };
+            return names[cat] || cat;
+        }
+
+        // ==================== 时间轴功能 ====================
+        function initTimeline() {
+            renderTimeline();
+        }
+
+        function renderTimeline() {
+            const container = document.getElementById('timelineContainer');
+            const sorted = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
+            
+            container.innerHTML = sorted.map((event, index) => `
+                <div class="timeline-item" style="transition-delay: ${index * 0.15}s">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">📅 ${event.date}</span>
+                        <h3 class="timeline-title">${event.title}</h3>
+                        <p class="timeline-desc">${event.desc}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // ==================== 管理功能 ====================
+        document.getElementById('adminBtn').addEventListener('click', () => {
+            if (isAdmin) {
+                openAdmin();
+            } else {
+                document.getElementById('passwordPanel').classList.add('active');
+            }
+        });
+
+        document.getElementById('footerAdmin').addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('adminBtn').click();
+        });
+
+        function verifyPassword() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === CONFIG.adminPassword) {
+                isAdmin = true;
+                closePassword();
+                openAdmin();
+                document.getElementById('adminPassword').value = '';
+            } else {
+                alert('密码错误，请重试');
+            }
+        }
+
+        function closePassword() {
+            document.getElementById('passwordPanel').classList.remove('active');
+        }
+
+        function openAdmin() {
+            document.getElementById('adminPanel').classList.add('active');
+            toggleAdminForm();
+        }
+
+        function closeAdmin() {
+            document.getElementById('adminPanel').classList.remove('active');
+        }
+
+        function toggleAdminForm() {
+            const action = document.getElementById('adminAction').value;
+            document.getElementById('photoForm').classList.add('hidden');
+            document.getElementById('eventForm').classList.add('hidden');
+            document.getElementById('deleteForm').classList.add('hidden');
+
+            if (action === 'photo') {
+                document.getElementById('photoForm').classList.remove('hidden');
+            } else if (action === 'event') {
+                document.getElementById('eventForm').classList.remove('hidden');
+            } else if (action === 'delete') {
+                document.getElementById('deleteForm').classList.remove('hidden');
+                updateDeleteList();
+            }
+        }
+
+        // ==================== 照片上传 ====================
+        function handlePhotoPreview() {
+            const files = document.getElementById('photoFile').files;
+            const preview = document.getElementById('photoPreview');
+            uploadedPhotos = [];
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    uploadedPhotos.push({
+                        src: e.target.result,
+                        name: file.name
+                    });
                     
-                    <div class="skills">
-                        <h3>我的技能</h3>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>HTML & CSS</span>
-                                <span>95%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-level" style="width: 95%;"></div>
-                            </div>
+                    preview.innerHTML += `
+                        <div class="preview-item">
+                            <img src="${e.target.result}" alt="preview">
+                            <button class="preview-remove" onclick="this.parentElement.remove()">×</button>
                         </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>JavaScript</span>
-                                <span>90%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-level" style="width: 90%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>React</span>
-                                <span>85%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-level" style="width: 85%;"></div>
-                            </div>
-                        </div>
-                        <div class="skill">
-                            <div class="skill-name">
-                                <span>Node.js</span>
-                                <span>75%</span>
-                            </div>
-                            <div class="skill-bar">
-                                <div class="skill-level" style="width: 75%;"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="about-image">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="我的照片" class="avatar">
-                </div>
-            </div>
-        </div>
-    </section>
+                    `;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">联系我</h2>
-            <div class="contact-cards">
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-envelope"></i>
-                    </div>
-                    <h3>邮箱</h3>
-                    <div class="contact-info">
-                        <p>dev@example.com</p>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-github"></i>
-                    </div>
-                    <h3>GitHub</h3>
-                    <div class="contact-info">
-                        <p>github.com/myusername</p>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fab fa-twitter"></i>
-                    </div>
-                    <h3>Twitter</h3>
-                    <div class="contact-info">
-                        <p>@myusername</p>
-                    </div>
-                </div>
-                
-                <div class="contact-card">
-                    <div class="contact-icon">
-                        <i class="fas fa-map-marker-alt"></i>
-                    </div>
-                    <h3>地址</h3>
-                    <div class="contact-info">
-                        <p>北京市海淀区</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+        function savePhoto() {
+            const title = document.getElementById('photoTitle').value;
+            const category = document.getElementById('photoCategory').value;
+            const date = document.getElementById('photoDate').value;
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>我的博客</h3>
-                    <p>记录技术学习心得，分享开发经验</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-github"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>快速链接</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">首页</a></li>
-                        <li><a href="#blog">博客</a></li>
-                        <li><a href="#about">关于我</a></li>
-                        <li><a href="#contact">联系</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>博客分类</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">前端开发</a></li>
-                        <li><a href="#">JavaScript</a></li>
-                        <li><a href="#">CSS技巧</a></li>
-                        <li><a href="#">Git & GitHub</a></li>
-                    </ul>
-                </div>
-                
-                <div class="footer-section">
-                    <h3>订阅更新</h3>
-                    <p>订阅我的博客，获取最新文章通知</p>
-                    <form>
-                        <input type="email" placeholder="你的邮箱地址" style="padding:10px; width:100%; margin:10px 0; border-radius:5px; border:none;">
-                        <button type="submit" style="background:var(--accent); color:white; padding:10px 20px; border:none; border-radius:5px; cursor:pointer;">订阅</button>
-                    </form>
-                </div>
-            </div>
+            if (!title || !date || uploadedPhotos.length === 0) {
+                alert('请填写完整信息并上传照片');
+                return;
+            }
+
+            uploadedPhotos.forEach((photo, index) => {
+                photos.push({
+                    id: Date.now() + index,
+                    title: title + (uploadedPhotos.length > 1 ? ` (${index + 1})` : ''),
+                    category,
+                    date,
+                    src: photo.src
+                });
+            });
+
+            saveData();
+            renderGallery();
             
-            <div class="copyright">
-                <p>&copy; 2023 我的个人博客. 保留所有权利.</p>
-            </div>
-        </div>
-    </footer>
+            // 重置表单
+            document.getElementById('photoTitle').value = '';
+            document.getElementById('photoDate').value = '';
+            document.getElementById('photoFile').value = '';
+            document.getElementById('photoPreview').innerHTML = '';
+            uploadedPhotos = [];
+            
+            alert('✅ 照片保存成功！');
+        }
+
+        // ==================== 事件管理 ====================
+        function saveEvent() {
+            const title = document.getElementById('eventTitle').value;
+            const date = document.getElementById('eventDate').value;
+            const desc = document.getElementById('eventDesc').value;
+
+            if (!title || !date || !desc) {
+                alert('请填写完整信息');
+                return;
+            }
+
+            events.push({
+                id: Date.now(),
+                title,
+                date,
+                desc
+            });
+
+            saveData();
+            renderTimeline();
+            
+            // 重置表单
+            document.getElementById('eventTitle').value = '';
+            document.getElementById('eventDate').value = '';
+            document.getElementById('eventDesc').value = '';
+            
+            alert('✅ 事件保存成功！');
+        }
+
+        // ==================== 删除功能 ====================
+        function updateDeleteList() {
+            const type = document.getElementById('deleteType').value;
+            const select = document.getElementById('deleteSelect');
+            
+            if (type === 'photo') {
+                select.innerHTML = photos.map(p => 
+                    `<option value="${p.id}">${p.title} (${p.date})</option>`
+                ).join('');
+            } else {
+                select.innerHTML = events.map(e => 
+                    `<option value="${e.id}">${e.title} (${e.date})</option>`
+                ).join('');
+            }
+        }
+
+        function deleteContent() {
+            const type = document.getElementById('deleteType').value;
+            const id = parseInt(document.getElementById('deleteSelect').value);
+
+            if (confirm('确定要删除这个项目吗？此操作不可恢复！')) {
+                if (type === 'photo') {
+                    photos = photos.filter(p => p.id !== id);
+                    saveData();
+                    renderGallery();
+                } else {
+                    events = events.filter(e => e.id !== id);
+                    saveData();
+                    renderTimeline();
+                }
+                alert('✅ 删除成功！');
+                updateDeleteList();
+            }
+        }
+
+        // ==================== 灯箱功能 ====================
+        function openLightbox(id) {
+            const photo = photos.find(p => p.id === id);
+            if (!photo) return;
+
+            document.getElementById('lightboxImg').src = photo.src;
+            document.getElementById('lightboxTitle').textContent = photo.title;
+            document.getElementById('lightboxDate').textContent = `📅 ${photo.date} · ${getCategoryName(photo.category)}`;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target.id === 'lightbox') {
+                closeLightbox();
+            }
+        });
+
+        // ==================== 滚动效果 ====================
+        function initScrollEffects() {
+            // 导航栏滚动效果
+            window.addEventListener('scroll', () => {
+                const nav = document.getElementById('navbar');
+                if (window.scrollY > 100) {
+                    nav.classList.add('scrolled');
+                } else {
+                    nav.classList.remove('scrolled');
+                }
+            });
+
+            // 时间轴滚动动画
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.2 });
+
+            document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
+        }
+
+        // ==================== 粒子背景 ====================
+        function initParticles() {
+            const canvas = document.getElementById('bg-canvas');
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+
+            function resize() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resize);
+            resize();
+
+            class Particle {
+                constructor() {
+                    this.reset();
+                }
+
+                reset() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.size = Math.random() * 3 + 1;
+                    this.opacity = Math.random() * 0.5 + 0.3;
+                }
+
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+
+                    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
+                        this.reset();
+                    }
+
+                    this.opacity = 0.3 + Math.sin(Date.now() * 0.001 * this.size) * 0.2;
+                }
+
+                draw() {
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < 80; i++) {
+                particles.push(new Particle());
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, width, height);
+                particles.forEach(p => {
+                    p.update();
+                    p.draw();
+                });
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+
+        // ==================== 键盘快捷键 ====================
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAdmin();
+                closePassword();
+                closeLightbox();
+            }
+        });
+    </script>
 </body>
 </html>
