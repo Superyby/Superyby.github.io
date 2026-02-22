@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Love Story | 属于我们的时光</title>
+    <title>Our Love Space | 我们的专属秘密基地</title>
     <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+SC:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* ==================== 全局变量 ==================== */
+        /* ==================== 全局变量与核心样式 ==================== */
         :root {
             --primary: #ff758c;
             --primary-light: #ff9a9e;
@@ -14,1728 +14,458 @@
             --accent: #fbc2eb;
             --deep: #2d3436;
             --text-main: #4a4a4a;
-            --text-light: #888;
-            --white: #ffffff;
-            --glass: rgba(255, 255, 255, 0.85);
-            --glass-border: rgba(255, 255, 255, 0.6);
-            --shadow-soft: 0 10px 40px -10px rgba(255, 117, 140, 0.3);
-            --shadow-strong: 0 20px 60px -15px rgba(161, 140, 209, 0.4);
-            --radius-xl: 30px;
-            --radius-lg: 24px;
-            --radius-md: 16px;
-            --radius-sm: 10px;
-            --transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --glass: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --shadow: 0 15px 35px rgba(255, 117, 140, 0.2);
+            --radius: 24px;
         }
 
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        html { scroll-behavior: smooth; }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Quicksand', 'Noto Serif SC', sans-serif;
-            background: linear-gradient(135deg, #fff5f7 0%, #ffe6eb 50%, #f8e1f0 100%);
+            background: linear-gradient(135deg, #fff5f7 0%, #f6e6ff 100%);
             color: var(--text-main);
             overflow-x: hidden;
-            min-height: 100vh;
-            position: relative;
-            line-height: 1.7;
+            line-height: 1.6;
         }
 
-        /* ==================== 动态背景 ==================== */
-        #bg-canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .floating-shapes {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        .shape {
-            position: absolute;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            opacity: 0.1;
-            animation: float 20s infinite ease-in-out;
-        }
-
-        .shape:nth-child(1) { width: 300px; height: 300px; top: 10%; left: 5%; animation-delay: 0s; }
-        .shape:nth-child(2) { width: 200px; height: 200px; top: 60%; left: 80%; animation-delay: -5s; }
-        .shape:nth-child(3) { width: 150px; height: 150px; top: 80%; left: 20%; animation-delay: -10s; }
-        .shape:nth-child(4) { width: 250px; height: 250px; top: 30%; left: 70%; animation-delay: -15s; }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(30px, -30px) rotate(90deg); }
-            50% { transform: translate(-20px, 20px) rotate(180deg); }
-            75% { transform: translate(20px, 30px) rotate(270deg); }
-        }
-
-        /* ==================== 加载动画 ==================== */
-        #loader {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(135deg, #ff758c 0%, #fbc2eb 100%);
-            z-index: 9999;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            transition: opacity 1s ease, visibility 1s;
-        }
-
-        .loader-heart {
-            font-size: 70px;
-            animation: heartbeat 1.2s infinite;
-            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
-        }
-
-        .loader-text {
-            margin-top: 25px;
-            font-family: 'Dancing Script', cursive;
-            font-size: 28px;
-            color: #fff;
-            letter-spacing: 3px;
-            opacity: 0;
-            animation: fadeIn 1s forwards 0.5s;
-        }
-
-        .loader-bar {
-            width: 200px;
-            height: 4px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 2px;
-            margin-top: 20px;
-            overflow: hidden;
-        }
-
-        .loader-progress {
-            height: 100%;
-            background: #fff;
-            width: 0;
-            animation: loading 2s ease-in-out forwards;
-        }
-
-        @keyframes loading { to { width: 100%; } }
-        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.25); } }
-        @keyframes fadeIn { to { opacity: 1; } }
-
-        #loader.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
+        /* 玻璃拟态通用卡片 */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
         }
 
         /* ==================== 导航栏 ==================== */
         nav {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 20px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            z-index: 1000;
-            backdrop-filter: blur(20px);
-            background: rgba(255,255,255,0.5);
-            border-bottom: 1px solid var(--glass-border);
-            transition: var(--transition);
-        }
-
-        nav.scrolled {
-            padding: 15px 40px;
-            background: rgba(255,255,255,0.8);
-            box-shadow: var(--shadow-soft);
-        }
-
-        .logo {
-            font-family: 'Dancing Script', cursive;
-            font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .logo:hover {
-            transform: scale(1.05);
-        }
-
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-
-        .nav-btn {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: var(--white);
-            border: none;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition);
-            font-size: 20px;
-            position: relative;
-        }
-
-        .nav-btn:hover {
-            transform: translateY(-3px) scale(1.1);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .nav-btn.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-        }
-
-        .music-disc {
-            animation: rotate 8s linear infinite;
-            animation-play-state: paused;
-        }
-
-        .music-disc.playing {
-            animation-play-state: running;
-        }
-
-        @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        /* ==================== 通用组件 ==================== */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 25px;
-        }
-
-        section {
-            padding: 120px 0;
-            position: relative;
-        }
-
-        .section-header {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-
-        .section-title {
-            font-size: 3rem;
-            color: var(--deep);
-            font-family: 'Noto Serif SC', serif;
-            font-weight: 700;
-            margin-bottom: 15px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title::after {
-            content: '✦';
-            display: block;
-            font-size: 24px;
-            color: var(--primary);
-            margin-top: 10px;
-        }
-
-        .section-subtitle {
-            font-size: 1.1rem;
-            color: var(--text-light);
-            font-style: italic;
-        }
-
-        .btn {
-            padding: 14px 35px;
-            border-radius: 50px;
-            border: none;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            box-shadow: 0 5px 20px rgba(255, 117, 140, 0.4);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 30px rgba(255, 117, 140, 0.6);
-        }
-
-        .btn-outline {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn-outline:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        /* ==================== Hero 区域 ==================== */
-        .hero {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            padding-top: 100px;
-            position: relative;
-        }
-
-        .hero-couple {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-            margin-bottom: 40px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.3s;
-        }
-
-        .couple-avatar {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 40px;
-            box-shadow: var(--shadow-strong);
-            border: 4px solid #fff;
-        }
-
-        .couple-heart {
-            font-size: 50px;
-            animation: heartbeat 1s infinite;
-        }
-
-        .hero h1 {
-            font-size: clamp(2.5rem, 6vw, 5rem);
-            color: var(--deep);
-            margin-bottom: 20px;
-            line-height: 1.2;
-            font-family: 'Noto Serif SC', serif;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.5s;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-light);
-            margin-bottom: 50px;
-            max-width: 600px;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.7s;
-        }
-
-        @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
-
-        /* ==================== 计时器卡片 ==================== */
-        .timer-card {
-            background: var(--glass);
-            backdrop-filter: blur(30px);
-            border: 1px solid var(--glass-border);
-            padding: 50px;
-            border-radius: var(--radius-xl);
-            box-shadow: var(--shadow-strong);
-            display: flex;
-            gap: 40px;
-            flex-wrap: wrap;
-            justify-content: center;
-            opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1s forwards 0.9s;
-            max-width: 90%;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .timer-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent,
-                rgba(255, 117, 140, 0.1),
-                transparent
-            );
-            animation: shine 4s infinite;
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
-        }
-
-        .timer-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 100px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .timer-num {
-            font-size: 3.5rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-family: 'Quicksand', sans-serif;
-            line-height: 1;
-        }
-
-        .timer-label {
-            font-size: 0.95rem;
-            color: var(--text-light);
-            margin-top: 10px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            font-weight: 600;
-        }
-
-        /* ==================== 照片库（带分类） ==================== */
-        .gallery-filters {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-
-        .filter-btn {
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 2px solid var(--glass-border);
-            background: var(--glass);
-            color: var(--text-main);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: var(--transition);
-            font-family: inherit;
-        }
-
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: #fff;
-            border-color: transparent;
-            transform: translateY(-2px);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 30px;
-        }
-
-        .photo-item {
-            background: var(--white);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition: var(--transition);
-            position: relative;
-            cursor: pointer;
-            opacity: 0;
-            transform: translateY(30px);
-        }
-
-        .photo-item.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .photo-item:hover {
-            transform: translateY(-10px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .photo-item img {
-            width: 100%;
-            height: 300px;
-            object-fit: cover;
-            transition: var(--transition);
-        }
-
-        .photo-item:hover img {
-            transform: scale(1.05);
-        }
-
-        .photo-overlay {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            padding: 20px;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
-            color: #fff;
-            transform: translateY(100%);
-            transition: var(--transition);
-        }
-
-        .photo-item:hover .photo-overlay {
-            transform: translateY(0);
-        }
-
-        .photo-date {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-bottom: 5px;
-        }
-
-        .photo-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-        }
-
-        .photo-category {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: var(--primary);
-            color: #fff;
-            padding: 5px 15px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
-        }
-
-        /* ==================== 时间轴 ==================== */
-        .timeline {
-            position: relative;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .timeline::before {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 3px;
-            background: linear-gradient(to bottom, var(--primary), var(--secondary), var(--accent));
-            transform: translateX(-50%);
-            border-radius: 3px;
-            box-shadow: 0 0 20px rgba(255, 117, 140, 0.5);
-        }
-
-        .timeline-item {
-            display: flex;
-            justify-content: flex-end;
-            padding-bottom: 60px;
-            position: relative;
-            width: 50%;
-            opacity: 0;
-            transform: translateX(-60px);
-            transition: all 0.8s ease;
-        }
-
-        .timeline-item:nth-child(even) {
-            align-self: flex-end;
-            justify-content: flex-start;
-            margin-left: 50%;
-            transform: translateX(60px);
-        }
-
-        .timeline-item.visible {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        .timeline-dot {
-            position: absolute;
-            right: -12px;
-            top: 0;
-            width: 24px;
-            height: 24px;
-            background: var(--white);
-            border: 4px solid var(--primary);
-            border-radius: 50%;
-            z-index: 2;
-            box-shadow: 0 0 0 6px rgba(255, 117, 140, 0.2);
-            transition: var(--transition);
-        }
-
-        .timeline-item:hover .timeline-dot {
-            transform: scale(1.3);
-            box-shadow: 0 0 0 10px rgba(255, 117, 140, 0.3);
-        }
-
-        .timeline-item:nth-child(even) .timeline-dot {
-            left: -12px;
-            right: auto;
-        }
-
-        .timeline-content {
-            background: var(--white);
-            padding: 35px;
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-soft);
-            width: 92%;
-            position: relative;
-            transition: var(--transition);
-            border: 1px solid var(--glass-border);
-        }
-
-        .timeline-content:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-strong);
-        }
-
-        .timeline-date {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--primary-light), var(--accent));
-            color: #fff;
-            padding: 6px 18px;
-            border-radius: 50px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            margin-bottom: 15px;
-        }
-
-        .timeline-title {
-            font-size: 1.5rem;
-            color: var(--deep);
-            margin-bottom: 12px;
-            font-family: 'Noto Serif SC', serif;
-            font-weight: 700;
-        }
-
-        .timeline-desc {
-            font-size: 1rem;
-            color: var(--text-light);
-            line-height: 1.8;
-        }
-
-        /* ==================== 管理面板 ==================== */
-        .admin-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(10px);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .admin-panel.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .admin-modal {
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            width: 90%;
-            max-width: 600px;
-            max-height: 90vh;
-            overflow-y: auto;
-            padding: 40px;
-            position: relative;
-            transform: scale(0.9) translateY(20px);
-            transition: var(--transition);
-        }
-
-        .admin-panel.active .admin-modal {
-            transform: scale(1) translateY(0);
-        }
-
-        .admin-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: #f5f5f5;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .admin-close:hover {
-            background: var(--primary);
-            color: #fff;
-        }
-
-        .admin-title {
-            font-size: 1.8rem;
-            color: var(--deep);
-            margin-bottom: 30px;
-            font-family: 'Noto Serif SC', serif;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--deep);
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .form-input,
-        .form-select,
-        .form-textarea {
-            width: 100%;
-            padding: 15px 20px;
-            border: 2px solid #eee;
-            border-radius: var(--radius-md);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: var(--transition);
-            background: #fafafa;
-        }
-
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: #fff;
-            box-shadow: 0 0 0 4px rgba(255, 117, 140, 0.1);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .file-upload {
-            border: 2px dashed var(--primary);
-            border-radius: var(--radius-md);
-            padding: 40px;
-            text-align: center;
-            cursor: pointer;
-            transition: var(--transition);
-            background: #fafafa;
-        }
-
-        .file-upload:hover {
-            background: rgba(255, 117, 140, 0.05);
-        }
-
-        .file-upload-icon {
-            font-size: 50px;
-            margin-bottom: 15px;
-            display: block;
-        }
-
-        .file-upload-text {
-            color: var(--text-light);
-        }
-
-        .preview-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .preview-item {
-            position: relative;
-            border-radius: var(--radius-sm);
-            overflow: hidden;
-            aspect-ratio: 1;
-        }
-
-        .preview-item img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .preview-remove {
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            width: 25px;
-            height: 25px;
-            border-radius: 50%;
-            background: var(--primary);
-            color: #fff;
-            border: none;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 14px;
-        }
-
-        /* ==================== 照片灯箱 ==================== */
-        .lightbox {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.9);
-            z-index: 3000;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: var(--transition);
-        }
-
-        .lightbox.active {
-            opacity: 1;
-            visibility: visible;
-        }
-
-        .lightbox-content {
-            max-width: 90%;
-            max-height: 90%;
-            position: relative;
-        }
-
-        .lightbox-content img {
-            max-width: 100%;
-            max-height: 85vh;
-            border-radius: var(--radius-md);
-            box-shadow: 0 0 50px rgba(255, 117, 140, 0.3);
-        }
-
-        .lightbox-close {
-            position: absolute;
-            top: -50px;
-            right: 0;
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 40px;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .lightbox-close:hover {
-            color: var(--primary);
-            transform: rotate(90deg);
-        }
-
-        .lightbox-info {
-            color: #fff;
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .lightbox-title {
-            font-size: 1.5rem;
-            margin-bottom: 10px;
-        }
-
-        .lightbox-date {
-            font-size: 0.9rem;
-            opacity: 0.7;
-        }
-
-        /* ==================== 密码验证 ==================== */
-        .password-modal {
-            background: var(--white);
-            border-radius: var(--radius-xl);
-            width: 90%;
-            max-width: 400px;
-            padding: 40px;
-            text-align: center;
-        }
-
-        .password-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        .password-title {
-            font-size: 1.5rem;
-            color: var(--deep);
-            margin-bottom: 10px;
-        }
-
-        .password-desc {
-            color: var(--text-light);
-            margin-bottom: 25px;
-        }
-
-        /* ==================== 页脚 ==================== */
-        footer {
-            text-align: center;
-            padding: 80px 20px;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            background: rgba(255,255,255,0.5);
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .footer-heart {
-            color: var(--primary);
-            display: inline-block;
-            animation: heartbeat 1.5s infinite;
-            font-size: 1.2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .footer-links a:hover {
-            color: var(--primary);
-        }
-
-        /* ==================== 响应式 ==================== */
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            padding: 20px; transition: 0.4s;
+        }
+        nav.scrolled { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 10px 20px; }
+        .nav-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Dancing Script', cursive; font-size: 28px; color: var(--primary); font-weight: bold; }
+        
+        .nav-links { display: flex; gap: 20px; }
+        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 14px; }
+
+        /* ==================== Hero 计时器 & 里程碑 ==================== */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 20px; text-align: center; }
+        .timer-container { margin-bottom: 40px; }
+        .timer-display { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+        .timer-item { position: relative; width: 80px; }
+        .timer-num { font-size: 2.5rem; font-weight: 800; color: var(--primary); display: block; }
+        .timer-label { font-size: 12px; color: var(--text-light); text-transform: uppercase; }
+
+        .milestone-tag {
+            display: inline-block; padding: 8px 20px; background: white; border-radius: 50px;
+            font-size: 14px; color: var(--secondary); margin-top: 20px; border: 1px dashed var(--secondary);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* ==================== 创意功能：记忆翻牌 ==================== */
+        .roulette-btn {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white; border: none; padding: 12px 30px; border-radius: 50px;
+            font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 30px;
+            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
+        }
+        .roulette-btn:hover { transform: scale(1.05); box-shadow: 0 15px 25px rgba(255, 117, 140, 0.5); }
+
+        /* ==================== 恋爱清单 ==================== */
+        .section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
+        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 50px; font-family: 'Noto Serif SC'; }
+        
+        .bucket-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
+        .bucket-item { padding: 25px; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
+        .bucket-item.completed { opacity: 0.7; background: rgba(255,255,255,0.4); }
+        .bucket-item.completed .check-box { background: var(--primary); color: white; }
+        .check-box { width: 30px; height: 30px; border: 2px solid var(--primary); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+
+        /* ==================== 时光胶囊 ==================== */
+        .capsule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .capsule-card { padding: 30px; text-align: center; position: relative; overflow: hidden; }
+        .capsule-lock { font-size: 40px; margin-bottom: 15px; display: block; }
+        .capsule-date { font-size: 13px; color: var(--text-light); }
+        .capsule-blur { filter: blur(8px); pointer-events: none; user-select: none; margin-top: 15px; }
+        .capsule-unlocked .capsule-blur { filter: none; pointer-events: auto; }
+
+        /* ==================== 时间轴 & 相册 (复用原有风格但优化) ==================== */
+        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
+        .timeline::before { content: ''; position: absolute; left: 50%; width: 2px; height: 100%; background: var(--accent); transform: translateX(-50%); }
+        .timeline-item { width: 50%; padding: 20px; position: relative; clear: both; }
+        .timeline-item:nth-child(even) { float: right; text-align: left; padding-left: 40px; }
+        .timeline-item:nth-child(odd) { float: left; text-align: right; padding-right: 40px; }
+        .timeline-dot { position: absolute; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; top: 30px; }
+        .timeline-item:nth-child(even) .timeline-dot { left: -8px; }
+        .timeline-item:nth-child(odd) .timeline-dot { right: -8px; }
+
+        /* ==================== 弹窗设计 (用于管理和抽奖) ==================== */
+        .modal { 
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
+            display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        }
+        .modal-content { width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 40px; position: relative; }
+        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; }
+
+        input, textarea, select {
+            width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid #eee; outline: none;
+        }
+
+        /* 动画 */
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        
+        /* 响应式适配 */
         @media (max-width: 768px) {
-            nav { padding: 15px 20px; }
-            .logo { font-size: 26px; }
-            
-            .hero-couple { gap: 15px; }
-            .couple-avatar { width: 70px; height: 70px; font-size: 30px; }
-            .couple-heart { font-size: 35px; }
-            
-            .hero h1 { font-size: 2.5rem; }
-            .hero p { font-size: 1.1rem; }
-            
-            .timer-card { padding: 30px 20px; gap: 20px; }
-            .timer-num { font-size: 2.5rem; }
-            
-            .section-title { font-size: 2.2rem; }
-            section { padding: 80px 0; }
-            
             .timeline::before { left: 20px; }
-            .timeline-item,
-            .timeline-item:nth-child(even) {
-                width: 100%;
-                margin-left: 0;
-                justify-content: flex-start;
-                padding-left: 55px;
-                transform: none !important;
-                opacity: 0;
-            }
-            .timeline-item.visible { opacity: 1; }
-            .timeline-dot { left: 8px !important; right: auto !important; }
-            
-            .gallery-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-            
-            .admin-modal { padding: 30px 20px; }
+            .timeline-item { width: 100%; float: none !important; text-align: left !important; padding-left: 45px !important; }
+            .timeline-dot { left: 12px !important; }
+            .timer-num { font-size: 1.8rem; }
+            .timer-item { width: 60px; }
         }
-
-        /* ==================== 工具类 ==================== */
-        .hidden { display: none !important; }
-        .text-center { text-align: center; }
-        .mt-20 { margin-top: 20px; }
-        .mb-20 { margin-bottom: 20px; }
     </style>
 </head>
 <body>
-    <!-- 背景元素 -->
-    <canvas id="bg-canvas"></canvas>
-    <div class="floating-shapes">
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-        <div class="shape"></div>
-    </div>
 
-    <!-- 加载动画 -->
-    <div id="loader">
-        <div class="loader-heart">💕</div>
-        <div class="loader-text">Loading Our Story...</div>
-        <div class="loader-bar">
-            <div class="loader-progress"></div>
-        </div>
-    </div>
+    <canvas id="canvas" style="position: fixed; top:0; left:0; z-index:-1;"></canvas>
 
-    <!-- 导航栏 -->
     <nav id="navbar">
-        <a href="#" class="logo">Us & Forever</a>
-        <div class="nav-right">
-            <button class="nav-btn music-disc" id="musicBtn" title="播放音乐">🎵</button>
-            <button class="nav-btn" id="adminBtn" title="管理内容">⚙️</button>
+        <div class="nav-content">
+            <div class="logo">Our Love Story</div>
+            <div class="nav-links">
+                <a href="#wishlist">愿望清单</a>
+                <a href="#capsule">时光胶囊</a>
+                <a href="#timeline">时光轴</a>
+                <a href="javascript:void(0)" onclick="openAdmin()">管理</a>
+            </div>
         </div>
-        <audio id="bgMusic" loop>
-            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-        </audio>
     </nav>
 
-    <!-- 主内容 -->
-    <div id="main-content">
-        <!-- Hero 区域 -->
-        <section class="hero container">
-            <div class="hero-couple">
-                <div class="couple-avatar">👦</div>
-                <div class="couple-heart">💖</div>
-                <div class="couple-avatar">👧</div>
+    <header class="hero">
+        <div class="timer-container">
+            <h2 style="font-family: 'Noto Serif SC';">我们已经相爱了</h2>
+            <div class="timer-display" id="main-timer">
+                <div class="timer-item"><span class="timer-num" id="d">0</span><span class="timer-label">Days</span></div>
+                <div class="timer-item"><span class="timer-num" id="h">0</span><span class="timer-label">Hrs</span></div>
+                <div class="timer-item"><span class="timer-num" id="m">0</span><span class="timer-label">Min</span></div>
+                <div class="timer-item"><span class="timer-num" id="s">0</span><span class="timer-label">Sec</span></div>
             </div>
-            <h1>星河滚滚 · 你是人间理想</h1>
-            <p>从相遇的那一刻起，时间便有了意义。这里记录着我们相爱的每一个瞬间。</p>
+            <div id="next-milestone" class="milestone-tag">加载中...</div>
+        </div>
+        
+        <button class="roulette-btn" onclick="triggerRoulette()">🎲 翻开一段旧时光</button>
+    </header>
+
+    <section class="section" id="wishlist">
+        <h2 class="section-title">💕 恋爱清单</h2>
+        <div class="bucket-grid" id="bucket-list-container">
+            </div>
+    </section>
+
+    <section class="section" id="capsule">
+        <h2 class="section-title">⏳ 时光胶囊</h2>
+        <div class="capsule-grid" id="capsule-container">
+            </div>
+    </section>
+
+    <section class="section" id="timeline">
+        <h2 class="section-title">📅 时光轨迹</h2>
+        <div class="timeline" id="timeline-container">
+            </div>
+    </section>
+
+    <div id="adminModal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-btn" onclick="closeAdmin()">&times;</span>
+            <h3 style="margin-bottom:20px;">秘密基地管理</h3>
             
-            <div class="timer-card">
-                <div class="timer-item">
-                    <span class="timer-num" id="days">0</span>
-                    <span class="timer-label">天</span>
-                </div>
-                <div class="timer-item">
-                    <span class="timer-num" id="hours">0</span>
-                    <span class="timer-label">时</span>
-                </div>
-                <div class="timer-item">
-                    <span class="timer-num" id="minutes">0</span>
-                    <span class="timer-label">分</span>
-                </div>
-                <div class="timer-item">
-                    <span class="timer-num" id="seconds">0</span>
-                    <span class="timer-label">秒</span>
-                </div>
-            </div>
-        </section>
-
-        <!-- 照片库 -->
-        <section class="container" id="gallery">
-            <div class="section-header">
-                <h2 class="section-title">我们的相册</h2>
-                <p class="section-subtitle">每一张照片，都是值得珍藏的回忆</p>
-            </div>
-            
-            <div class="gallery-filters" id="galleryFilters">
-                <button class="filter-btn active" data-category="all">全部</button>
-                <button class="filter-btn" data-category="travel">旅行</button>
-                <button class="filter-btn" data-category="daily">日常</button>
-                <button class="filter-btn" data-category="celebration">纪念日</button>
-                <button class="filter-btn" data-category="other">其他</button>
-            </div>
-            
-            <div class="gallery-grid" id="galleryGrid">
-                <!-- 照片由 JS 动态生成 -->
-            </div>
-        </section>
-
-        <!-- 时间轴 -->
-        <section class="container" id="timeline">
-            <div class="section-header">
-                <h2 class="section-title">爱情时间轴</h2>
-                <p class="section-subtitle">我们一起走过的每一步</p>
-            </div>
-            
-            <div class="timeline" id="timelineContainer">
-                <!-- 时间轴由 JS 动态生成 -->
-            </div>
-        </section>
-
-        <!-- 页脚 -->
-        <footer>
-            <div class="footer-links">
-                <a href="#gallery">相册</a>
-                <a href="#timeline">时间轴</a>
-                <a href="#" id="footerAdmin">管理</a>
-            </div>
-            <p>Made with <span class="footer-heart">❤</span> for You</p>
-            <p>© <span id="currentYear">2024</span> Our Love Story. All Rights Reserved.</p>
-        </footer>
-    </div>
-
-    <!-- 管理面板 -->
-    <div class="admin-panel" id="adminPanel">
-        <div class="admin-modal">
-            <button class="admin-close" onclick="closeAdmin()">&times;</button>
-            <h3 class="admin-title">内容管理</h3>
-            
-            <div class="form-group">
-                <label class="form-label">选择操作</label>
-                <select class="form-select" id="adminAction" onchange="toggleAdminForm()">
-                    <option value="photo">添加照片</option>
-                    <option value="event">添加事件</option>
-                    <option value="delete">删除内容</option>
-                </select>
+            <div style="display:flex; gap:10px; margin-bottom:20px;">
+                <button onclick="switchAdminTab('event')" class="roulette-btn" style="padding:8px 15px;">记事/图片</button>
+                <button onclick="switchAdminTab('wish')" class="roulette-btn" style="padding:8px 15px;">愿望</button>
+                <button onclick="switchAdminTab('capsule')" class="roulette-btn" style="padding:8px 15px;">胶囊</button>
             </div>
 
-            <!-- 添加照片表单 -->
-            <div id="photoForm">
-                <div class="form-group">
-                    <label class="form-label">照片标题</label>
-                    <input type="text" class="form-input" id="photoTitle" placeholder="例如：第一次旅行">
+            <div id="admin-form-area">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">分类</label>
-                    <select class="form-select" id="photoCategory">
-                        <option value="travel">旅行</option>
-                        <option value="daily">日常</option>
-                        <option value="celebration">纪念日</option>
-                        <option value="other">其他</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">日期</label>
-                    <input type="date" class="form-input" id="photoDate">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">上传照片</label>
-                    <div class="file-upload" onclick="document.getElementById('photoFile').click()">
-                        <span class="file-upload-icon">📷</span>
-                        <span class="file-upload-text">点击选择照片（支持多张）</span>
-                        <input type="file" id="photoFile" accept="image/*" multiple hidden onchange="handlePhotoPreview()">
-                    </div>
-                    <div class="preview-container" id="photoPreview"></div>
-                </div>
-                <button class="btn btn-primary" style="width: 100%" onclick="savePhoto()">💾 保存照片</button>
-            </div>
 
-            <!-- 添加事件表单 -->
-            <div id="eventForm" class="hidden">
-                <div class="form-group">
-                    <label class="form-label">事件标题</label>
-                    <input type="text" class="form-input" id="eventTitle" placeholder="例如：初次相遇">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">日期</label>
-                    <input type="date" class="form-input" id="eventDate">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">事件描述</label>
-                    <textarea class="form-textarea" id="eventDesc" placeholder="详细描述这个特别的日子..."></textarea>
-                </div>
-                <button class="btn btn-primary" style="width: 100%" onclick="saveEvent()">💾 保存事件</button>
-            </div>
-
-            <!-- 删除内容表单 -->
-            <div id="deleteForm" class="hidden">
-                <div class="form-group">
-                    <label class="form-label">选择要删除的内容</label>
-                    <select class="form-select" id="deleteType" onchange="updateDeleteList()">
-                        <option value="photo">照片</option>
-                        <option value="event">事件</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">选择具体项目</label>
-                    <select class="form-select" id="deleteSelect">
-                        <!-- 动态填充 -->
-                    </select>
-                </div>
-                <button class="btn btn-primary" style="width: 100%; background: linear-gradient(135deg, #ff6b6b, #ee5a5a)" onclick="deleteContent()">🗑️ 确认删除</button>
+            <hr style="margin:20px 0; opacity:0.2;">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <button onclick="exportData()" style="background:#f0f0f0; border:none; padding:10px; border-radius:10px; cursor:pointer;">💾 导出备份</button>
+                <button onclick="importData()" style="background:#f0f0f0; border:none; padding:10px; border-radius:10px; cursor:pointer;">📥 导入数据</button>
             </div>
         </div>
     </div>
 
-    <!-- 密码验证 -->
-    <div class="admin-panel" id="passwordPanel">
-        <div class="admin-modal password-modal">
-            <span class="password-icon">🔐</span>
-            <h3 class="password-title">管理员验证</h3>
-            <p class="password-desc">请输入管理密码</p>
-            <input type="password" class="form-input mb-20" id="adminPassword" placeholder="密码：1314" style="text-align: center; font-size: 1.2rem;">
-            <button class="btn btn-primary" style="width: 100%" onclick="verifyPassword()">🔓 验证</button>
-            <button class="btn btn-outline" style="width: 100%; margin-top: 15px" onclick="closePassword()">取消</button>
-        </div>
-    </div>
-
-    <!-- 照片灯箱 -->
-    <div class="lightbox" id="lightbox">
-        <div class="lightbox-content">
-            <button class="lightbox-close" onclick="closeLightbox()">&times;</button>
-            <img src="" alt="" id="lightboxImg">
-            <div class="lightbox-info">
-                <h3 class="lightbox-title" id="lightboxTitle"></h3>
-                <p class="lightbox-date" id="lightboxDate"></p>
-            </div>
+    <div id="rouletteModal" class="modal">
+        <div class="modal-content glass-card" style="text-align:center;">
+            <span class="close-btn" onclick="document.getElementById('rouletteModal').style.display='none'">&times;</span>
+            <div id="roulette-result"></div>
         </div>
     </div>
 
     <script>
-        // ==================== 配置 ====================
+        // ==================== 配置与数据 ====================
         const CONFIG = {
-            startDate: '2023-05-20', // 纪念日
-            adminPassword: '1314', // 管理密码
-            defaultPhotos: [
-                {
-                    id: 1,
-                    title: '初次相遇',
-                    category: 'daily',
-                    date: '2023-05-20',
-                    src: 'https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600'
-                },
-                {
-                    id: 2,
-                    title: '第一次旅行',
-                    category: 'travel',
-                    date: '2023-08-15',
-                    src: 'https://images.unsplash.com/photo-1529333166437-7750a6dd5a70?w=600'
-                },
-                {
-                    id: 3,
-                    title: '情人节惊喜',
-                    category: 'celebration',
-                    date: '2024-02-14',
-                    src: 'https://images.unsplash.com/photo-1511895426328-dc8714191300?w=600'
-                },
-                {
-                    id: 4,
-                    title: '日常小确幸',
-                    category: 'daily',
-                    date: '2024-06-01',
-                    src: 'https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=600'
-                },
-                {
-                    id: 5,
-                    title: '周年纪念',
-                    category: 'celebration',
-                    date: '2024-05-20',
-                    src: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=600'
-                },
-                {
-                    id: 6,
-                    title: '海边日落',
-                    category: 'travel',
-                    date: '2024-07-10',
-                    src: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600'
-                }
-            ],
-            defaultEvents: [
-                {
-                    id: 1,
-                    title: '初次相遇',
-                    date: '2023-05-20',
-                    desc: '在那家街角的咖啡馆，阳光刚好洒在你的肩膀上。那一刻，我知道故事开始了。'
-                },
-                {
-                    id: 2,
-                    title: '第一次约会',
-                    date: '2023-06-01',
-                    desc: '一起去看电影，手心里全是汗，却舍不得放开。'
-                },
-                {
-                    id: 3,
-                    title: '第一次旅行',
-                    date: '2023-08-15',
-                    desc: '我们一起去了大理，在洱海边吹风。你说想一直这样走下去，我点了点头。'
-                },
-                {
-                    id: 4,
-                    title: '正式在一起',
-                    date: '2023-10-10',
-                    desc: '在漫天烟花下，我们确认了彼此的心意。从此，我的世界有了你。'
-                },
-                {
-                    id: 5,
-                    title: '第一个情人节',
-                    date: '2024-02-14',
-                    desc: '没有昂贵的礼物，只有亲手做的晚餐和满屋子的鲜花。平凡却最珍贵。'
-                },
-                {
-                    id: 6,
-                    title: '一周年纪念',
-                    date: '2024-05-20',
-                    desc: '一年前的今天，我们相遇。一年后的今天，我们更加相爱。'
-                }
-            ]
+            startDate: '2024-05-20T00:00:00', // 恋爱开始时间
+            password: '1314', // 管理密码
+            music: 'https://api.uomg.com/api/rand.music?sort=热歌榜' // 示例音乐
         };
 
-        // ==================== 全局变量 ====================
-        let photos = [];
-        let events = [];
-        let uploadedPhotos = [];
-        let currentFilter = 'all';
-        let isAdmin = false;
+        // 数据存储结构
+        let storage = {
+            events: JSON.parse(localStorage.getItem('love_events')) || [],
+            wishes: JSON.parse(localStorage.getItem('love_wishes')) || [],
+            capsules: JSON.parse(localStorage.getItem('love_capsules')) || []
+        };
 
-        // ==================== 初始化 ====================
-        window.addEventListener('load', () => {
-            setTimeout(() => {
-                document.getElementById('loader').classList.add('hidden');
-                initData();
-                initTimer();
-                initGallery();
-                initTimeline();
-                initParticles();
-                initScrollEffects();
-                document.getElementById('currentYear').textContent = new Date().getFullYear();
-            }, 2500);
-        });
-
-        // ==================== 数据管理 ====================
-        function initData() {
-            // 加载照片
-            const savedPhotos = localStorage.getItem('lovePhotos');
-            if (savedPhotos) {
-                photos = JSON.parse(savedPhotos);
-            } else {
-                photos = [...CONFIG.defaultPhotos];
-                saveData();
-            }
-
-            // 加载事件
-            const savedEvents = localStorage.getItem('loveEvents');
-            if (savedEvents) {
-                events = JSON.parse(savedEvents);
-            } else {
-                events = [...CONFIG.defaultEvents];
-                saveData();
-            }
-        }
-
-        function saveData() {
-            localStorage.setItem('lovePhotos', JSON.stringify(photos));
-            localStorage.setItem('loveEvents', JSON.stringify(events));
-        }
-
-        // ==================== 计时器 ====================
+        // ==================== 核心：计时器与里程碑 ====================
         function initTimer() {
-            function update() {
-                const startDate = new Date(CONFIG.startDate);
-                const now = new Date();
-                const diff = now - startDate;
-                
+            const update = () => {
+                const start = new Date(CONFIG.startDate).getTime();
+                const now = new Date().getTime();
+                const diff = now - start;
+
                 const days = Math.floor(diff / (1000 * 60 * 60 * 24));
                 const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-                
-                document.getElementById('days').innerText = days;
-                document.getElementById('hours').innerText = hours.toString().padStart(2, '0');
-                document.getElementById('minutes').innerText = minutes.toString().padStart(2, '0');
-                document.getElementById('seconds').innerText = seconds.toString().padStart(2, '0');
-            }
+
+                document.getElementById('d').innerText = days;
+                document.getElementById('h').innerText = hours;
+                document.getElementById('m').innerText = minutes;
+                document.getElementById('s').innerText = seconds;
+
+                // 计算里程碑
+                let next;
+                const milestones = [100, 200, 300, 365, 520, 800, 1000, 1314, 2000];
+                for (let m of milestones) {
+                    if (m > days) { next = m; break; }
+                }
+                document.getElementById('next-milestone').innerText = `✨ 距离我们的 ${next} 天纪念日还剩 ${next - days} 天`;
+            };
             setInterval(update, 1000);
             update();
         }
 
-        // ==================== 音乐控制 ====================
-        const musicBtn = document.getElementById('musicBtn');
-        const bgMusic = document.getElementById('bgMusic');
-        let isPlaying = false;
-
-        musicBtn.addEventListener('click', () => {
-            if (isPlaying) {
-                bgMusic.pause();
-                musicBtn.classList.remove('playing');
-            } else {
-                bgMusic.play();
-                musicBtn.classList.add('playing');
+        // ==================== 创意功能：记忆抽奖 ====================
+        function triggerRoulette() {
+            const allMemories = [...storage.events, ...storage.wishes.filter(w => w.completed)];
+            if (allMemories.length === 0) {
+                alert("记忆库还是空的哦，快去添加点点滴滴吧！");
+                return;
             }
-            isPlaying = !isPlaying;
-        });
 
-        // ==================== 画廊功能 ====================
-        function initGallery() {
-            renderGallery();
+            const item = allMemories[Math.floor(Math.random() * allMemories.length)];
+            const resultDiv = document.getElementById('roulette-result');
             
-            // 分类过滤
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                    btn.classList.add('active');
-                    currentFilter = btn.dataset.category;
-                    renderGallery();
-                });
-            });
+            resultDiv.innerHTML = `
+                <h2 style="color:var(--primary); margin-bottom:15px;">还记得这天吗？</h2>
+                ${item.image ? `<img src="${item.image}" style="width:100%; border-radius:15px; margin-bottom:15px;">` : ''}
+                <p style="font-size:18px; font-weight:600;">${item.title || item.text}</p>
+                <p style="color:var(--text-light); font-size:14px; margin-top:10px;">${item.date || '心愿达成日'}</p>
+            `;
+            
+            document.getElementById('rouletteModal').style.display = 'flex';
         }
 
-        function renderGallery() {
-            const grid = document.getElementById('galleryGrid');
-            const filtered = currentFilter === 'all' 
-                ? photos 
-                : photos.filter(p => p.category === currentFilter);
-            
-            grid.innerHTML = filtered.map((photo, index) => `
-                <div class="photo-item" style="transition-delay: ${index * 0.1}s" onclick="openLightbox(${photo.id})">
-                    <img src="${photo.src}" alt="${photo.title}" loading="lazy">
-                    <span class="photo-category">${getCategoryName(photo.category)}</span>
-                    <div class="photo-overlay">
-                        <div class="photo-date">📅 ${photo.date}</div>
-                        <div class="photo-title">${photo.title}</div>
-                    </div>
+        // ==================== 数据渲染逻辑 ====================
+        function renderAll() {
+            // 渲染愿望
+            const wishContainer = document.getElementById('bucket-list-container');
+            wishContainer.innerHTML = storage.wishes.map((w, i) => `
+                <div class="bucket-item glass-card ${w.completed ? 'completed' : ''}" onclick="toggleWish(${i})">
+                    <div class="check-box">${w.completed ? '✓' : ''}</div>
+                    <span>${w.text}</span>
                 </div>
             `).join('');
 
-            // 触发动画
-            setTimeout(() => {
-                document.querySelectorAll('.photo-item').forEach(item => {
-                    item.classList.add('visible');
-                });
-            }, 100);
-        }
+            // 渲染时光胶囊
+            const capsuleContainer = document.getElementById('capsule-container');
+            const now = new Date().getTime();
+            capsuleContainer.innerHTML = storage.capsules.map(c => {
+                const unlockTime = new Date(c.unlockDate).getTime();
+                const isLocked = now < unlockTime;
+                return `
+                    <div class="capsule-card glass-card ${isLocked ? '' : 'capsule-unlocked'}">
+                        <span class="capsule-lock">${isLocked ? '🔒' : '🎁'}</span>
+                        <div class="capsule-date">计划解锁：${c.unlockDate}</div>
+                        <div class="${isLocked ? 'capsule-blur' : ''}">
+                            <h4 style="margin:10px 0;">${isLocked ? '这是一个秘密' : c.title}</h4>
+                            <p>${isLocked ? '等到那天再来揭开吧...' : c.content}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
 
-        function getCategoryName(cat) {
-            const names = {
-                travel: '旅行',
-                daily: '日常',
-                celebration: '纪念日',
-                other: '其他'
-            };
-            return names[cat] || cat;
-        }
-
-        // ==================== 时间轴功能 ====================
-        function initTimeline() {
-            renderTimeline();
-        }
-
-        function renderTimeline() {
-            const container = document.getElementById('timelineContainer');
-            const sorted = [...events].sort((a, b) => new Date(a.date) - new Date(b.date));
-            
-            container.innerHTML = sorted.map((event, index) => `
-                <div class="timeline-item" style="transition-delay: ${index * 0.15}s">
+            // 渲染时间轴
+            const timelineContainer = document.getElementById('timeline-container');
+            timelineContainer.innerHTML = storage.events.sort((a,b) => new Date(b.date) - new Date(a.date)).map(e => `
+                <div class="timeline-item">
                     <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-date">📅 ${event.date}</span>
-                        <h3 class="timeline-title">${event.title}</h3>
-                        <p class="timeline-desc">${event.desc}</p>
+                    <div class="glass-card" style="padding:20px;">
+                        <span style="font-size:12px; color:var(--primary);">${e.date}</span>
+                        <h4 style="margin:5px 0;">${e.title}</h4>
+                        ${e.image ? `<img src="${e.image}" style="width:100%; border-radius:10px; margin:10px 0;">` : ''}
+                        <p style="font-size:14px;">${e.text}</p>
                     </div>
                 </div>
             `).join('');
         }
 
-        // ==================== 管理功能 ====================
-        document.getElementById('adminBtn').addEventListener('click', () => {
-            if (isAdmin) {
-                openAdmin();
-            } else {
-                document.getElementById('passwordPanel').classList.add('active');
-            }
-        });
-
-        document.getElementById('footerAdmin').addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('adminBtn').click();
-        });
-
-        function verifyPassword() {
-            const password = document.getElementById('adminPassword').value;
-            if (password === CONFIG.adminPassword) {
-                isAdmin = true;
-                closePassword();
-                openAdmin();
-                document.getElementById('adminPassword').value = '';
-            } else {
-                alert('密码错误，请重试');
+        // ==================== 管理逻辑 ====================
+        let currentTab = 'event';
+        function switchAdminTab(tab) {
+            currentTab = tab;
+            const area = document.getElementById('admin-form-area');
+            if(tab === 'event') {
+                area.innerHTML = `
+                    <input type="text" id="ev-title" placeholder="事件标题">
+                    <textarea id="ev-text" placeholder="描述这天的故事..."></textarea>
+                    <input type="date" id="ev-date">
+                    <input type="file" id="ev-img" accept="image/*" onchange="handleImage(this)">
+                    <button onclick="saveEvent()" class="roulette-btn" style="width:100%;">保存回忆</button>
+                `;
+            } else if(tab === 'wish') {
+                area.innerHTML = `
+                    <input type="text" id="wi-text" placeholder="我们的下一个愿望是...">
+                    <button onclick="saveWish()" class="roulette-btn" style="width:100%;">加入清单</button>
+                `;
+            } else if(tab === 'capsule') {
+                area.innerHTML = `
+                    <input type="text" id="ca-title" placeholder="给未来的信封标题">
+                    <textarea id="ca-content" placeholder="写下现在的悄悄话..."></textarea>
+                    <p style="font-size:12px; color:gray;">解锁日期：</p>
+                    <input type="date" id="ca-date">
+                    <button onclick="saveCapsule()" class="roulette-btn" style="width:100%;">封存胶囊</button>
+                `;
             }
         }
 
-        function closePassword() {
-            document.getElementById('passwordPanel').classList.remove('active');
+        let tempImage = "";
+        function handleImage(input) {
+            const reader = new FileReader();
+            reader.onload = e => tempImage = e.target.result;
+            reader.readAsDataURL(input.files[0]);
         }
 
+        function saveEvent() {
+            const data = {
+                title: document.getElementById('ev-title').value,
+                text: document.getElementById('ev-text').value,
+                date: document.getElementById('ev-date').value,
+                image: tempImage
+            };
+            storage.events.push(data);
+            syncAndRefresh();
+        }
+
+        function saveWish() {
+            storage.wishes.push({ text: document.getElementById('wi-text').value, completed: false });
+            syncAndRefresh();
+        }
+
+        function saveCapsule() {
+            storage.capsules.push({
+                title: document.getElementById('ca-title').value,
+                content: document.getElementById('ca-content').value,
+                unlockDate: document.getElementById('ca-date').value
+            });
+            syncAndRefresh();
+        }
+
+        function toggleWish(index) {
+            storage.wishes[index].completed = !storage.wishes[index].completed;
+            syncAndRefresh();
+        }
+
+        function syncAndRefresh() {
+            localStorage.setItem('love_events', JSON.stringify(storage.events));
+            localStorage.setItem('love_wishes', JSON.stringify(storage.wishes));
+            localStorage.setItem('love_capsules', JSON.stringify(storage.capsules));
+            renderAll();
+            tempImage = "";
+            alert("已同步到你的空间！");
+        }
+
+        // ==================== 数据备份功能 ====================
+        function exportData() {
+            const dataStr = JSON.stringify(storage);
+            const blob = new Blob([dataStr], { type: "application/json" });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `love_backup_${new Date().toLocaleDateString()}.json`;
+            a.click();
+        }
+
+        function importData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.onchange = e => {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const imported = JSON.parse(ev.target.result);
+                    if(confirm("导入将覆盖现有数据，确定吗？")) {
+                        storage = imported;
+                        syncAndRefresh();
+                    }
+                };
+                reader.readAsText(e.target.files[0]);
+            };
+            input.click();
+        }
+
+        // ==================== 界面控制 ====================
         function openAdmin() {
-            document.getElementById('adminPanel').classList.add('active');
-            toggleAdminForm();
+            const pass = prompt("请输入暗号：");
+            if(pass === CONFIG.password) {
+                document.getElementById('adminModal').style.display = 'flex';
+                switchAdminTab('event');
+            } else {
+                alert("暗号不对哦，亲爱的~");
+            }
         }
 
         function closeAdmin() {
-            document.getElementById('adminPanel').classList.remove('active');
+            document.getElementById('adminModal').style.display = 'none';
         }
 
-        function toggleAdminForm() {
-            const action = document.getElementById('adminAction').value;
-            document.getElementById('photoForm').classList.add('hidden');
-            document.getElementById('eventForm').classList.add('hidden');
-            document.getElementById('deleteForm').classList.add('hidden');
-
-            if (action === 'photo') {
-                document.getElementById('photoForm').classList.remove('hidden');
-            } else if (action === 'event') {
-                document.getElementById('eventForm').classList.remove('hidden');
-            } else if (action === 'delete') {
-                document.getElementById('deleteForm').classList.remove('hidden');
-                updateDeleteList();
-            }
-        }
-
-        // ==================== 照片上传 ====================
-        function handlePhotoPreview() {
-            const files = document.getElementById('photoFile').files;
-            const preview = document.getElementById('photoPreview');
-            uploadedPhotos = [];
-
-            Array.from(files).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    uploadedPhotos.push({
-                        src: e.target.result,
-                        name: file.name
-                    });
-                    
-                    preview.innerHTML += `
-                        <div class="preview-item">
-                            <img src="${e.target.result}" alt="preview">
-                            <button class="preview-remove" onclick="this.parentElement.remove()">×</button>
-                        </div>
-                    `;
-                };
-                reader.readAsDataURL(file);
-            });
-        }
-
-        function savePhoto() {
-            const title = document.getElementById('photoTitle').value;
-            const category = document.getElementById('photoCategory').value;
-            const date = document.getElementById('photoDate').value;
-
-            if (!title || !date || uploadedPhotos.length === 0) {
-                alert('请填写完整信息并上传照片');
-                return;
-            }
-
-            uploadedPhotos.forEach((photo, index) => {
-                photos.push({
-                    id: Date.now() + index,
-                    title: title + (uploadedPhotos.length > 1 ? ` (${index + 1})` : ''),
-                    category,
-                    date,
-                    src: photo.src
-                });
-            });
-
-            saveData();
-            renderGallery();
-            
-            // 重置表单
-            document.getElementById('photoTitle').value = '';
-            document.getElementById('photoDate').value = '';
-            document.getElementById('photoFile').value = '';
-            document.getElementById('photoPreview').innerHTML = '';
-            uploadedPhotos = [];
-            
-            alert('✅ 照片保存成功！');
-        }
-
-        // ==================== 事件管理 ====================
-        function saveEvent() {
-            const title = document.getElementById('eventTitle').value;
-            const date = document.getElementById('eventDate').value;
-            const desc = document.getElementById('eventDesc').value;
-
-            if (!title || !date || !desc) {
-                alert('请填写完整信息');
-                return;
-            }
-
-            events.push({
-                id: Date.now(),
-                title,
-                date,
-                desc
-            });
-
-            saveData();
-            renderTimeline();
-            
-            // 重置表单
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventDesc').value = '';
-            
-            alert('✅ 事件保存成功！');
-        }
-
-        // ==================== 删除功能 ====================
-        function updateDeleteList() {
-            const type = document.getElementById('deleteType').value;
-            const select = document.getElementById('deleteSelect');
-            
-            if (type === 'photo') {
-                select.innerHTML = photos.map(p => 
-                    `<option value="${p.id}">${p.title} (${p.date})</option>`
-                ).join('');
-            } else {
-                select.innerHTML = events.map(e => 
-                    `<option value="${e.id}">${e.title} (${e.date})</option>`
-                ).join('');
-            }
-        }
-
-        function deleteContent() {
-            const type = document.getElementById('deleteType').value;
-            const id = parseInt(document.getElementById('deleteSelect').value);
-
-            if (confirm('确定要删除这个项目吗？此操作不可恢复！')) {
-                if (type === 'photo') {
-                    photos = photos.filter(p => p.id !== id);
-                    saveData();
-                    renderGallery();
-                } else {
-                    events = events.filter(e => e.id !== id);
-                    saveData();
-                    renderTimeline();
-                }
-                alert('✅ 删除成功！');
-                updateDeleteList();
-            }
-        }
-
-        // ==================== 灯箱功能 ====================
-        function openLightbox(id) {
-            const photo = photos.find(p => p.id === id);
-            if (!photo) return;
-
-            document.getElementById('lightboxImg').src = photo.src;
-            document.getElementById('lightboxTitle').textContent = photo.title;
-            document.getElementById('lightboxDate').textContent = `📅 ${photo.date} · ${getCategoryName(photo.category)}`;
-            document.getElementById('lightbox').classList.add('active');
-        }
-
-        function closeLightbox() {
-            document.getElementById('lightbox').classList.remove('active');
-        }
-
-        document.getElementById('lightbox').addEventListener('click', (e) => {
-            if (e.target.id === 'lightbox') {
-                closeLightbox();
-            }
-        });
-
-        // ==================== 滚动效果 ====================
-        function initScrollEffects() {
-            // 导航栏滚动效果
-            window.addEventListener('scroll', () => {
-                const nav = document.getElementById('navbar');
-                if (window.scrollY > 100) {
-                    nav.classList.add('scrolled');
-                } else {
-                    nav.classList.remove('scrolled');
-                }
-            });
-
-            // 时间轴滚动动画
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                    }
-                });
-            }, { threshold: 0.2 });
-
-            document.querySelectorAll('.timeline-item').forEach(el => observer.observe(el));
-        }
-
-        // ==================== 粒子背景 ====================
+        // 简易粒子背景
         function initParticles() {
-            const canvas = document.getElementById('bg-canvas');
+            const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resize);
-            resize();
-
-            class Particle {
-                constructor() {
-                    this.reset();
-                }
-
-                reset() {
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                    this.vx = (Math.random() - 0.5) * 0.3;
-                    this.vy = (Math.random() - 0.5) * 0.3;
-                    this.size = Math.random() * 3 + 1;
-                    this.opacity = Math.random() * 0.5 + 0.3;
-                }
-
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-
-                    if (this.x < 0 || this.x > width || this.y < 0 || this.y > height) {
-                        this.reset();
-                    }
-
-                    this.opacity = 0.3 + Math.sin(Date.now() * 0.001 * this.size) * 0.2;
-                }
-
-                draw() {
-                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`;
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fill();
-                }
-            }
-
-            for (let i = 0; i < 80; i++) {
-                particles.push(new Particle());
-            }
-
+            let w, h, particles = [];
+            const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
+            window.onresize = resize; resize();
+            
+            for(let i=0; i<50; i++) particles.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*2+1, v: Math.random()*0.5 });
+            
             function animate() {
-                ctx.clearRect(0, 0, width, height);
+                ctx.clearRect(0,0,w,h);
+                ctx.fillStyle = "rgba(255, 117, 140, 0.2)";
                 particles.forEach(p => {
-                    p.update();
-                    p.draw();
+                    p.y -= p.v;
+                    if(p.y < -10) p.y = h + 10;
+                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
                 });
                 requestAnimationFrame(animate);
             }
             animate();
         }
 
-        // ==================== 键盘快捷键 ====================
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeAdmin();
-                closePassword();
-                closeLightbox();
-            }
-        });
+        // 初始化
+        window.onload = () => {
+            initTimer();
+            initParticles();
+            renderAll();
+            
+            // 导航栏效果
+            window.addEventListener('scroll', () => {
+                document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+            });
+        };
     </script>
 </body>
 </html>
