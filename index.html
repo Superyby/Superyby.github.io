@@ -3,469 +3,363 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Our Love Space | 我们的专属秘密基地</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Noto+Serif+SC:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Infinity Love | 永恒记录仪</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Noto+Serif+SC:wght@700&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* ==================== 全局变量与核心样式 ==================== */
+        /* ==================== 电影级调色盘 ==================== */
         :root {
-            --primary: #ff758c;
-            --primary-light: #ff9a9e;
-            --secondary: #a18cd1;
-            --accent: #fbc2eb;
-            --deep: #2d3436;
-            --text-main: #4a4a4a;
-            --glass: rgba(255, 255, 255, 0.8);
-            --glass-border: rgba(255, 255, 255, 0.5);
-            --shadow: 0 15px 35px rgba(255, 117, 140, 0.2);
-            --radius: 24px;
+            --bg: #050508;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --primary: #00f2ff; /* 霓虹青 */
+            --secondary: #7000ff; /* 极光紫 */
+            --accent: #ff007a; /* 告白粉 */
+            --text: #e0e0e0;
+            --transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; cursor: none; } /* 自定义准星 */
         body {
-            font-family: 'Quicksand', 'Noto Serif SC', sans-serif;
-            background: linear-gradient(135deg, #fff5f7 0%, #f6e6ff 100%);
-            color: var(--text-main);
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Montserrat', 'Noto Serif SC', serif;
             overflow-x: hidden;
-            line-height: 1.6;
+            scroll-behavior: smooth;
         }
 
-        /* 玻璃拟态通用卡片 */
-        .glass-card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
+        /* 自定义光标 */
+        #cursor {
+            width: 20px; height: 20px; border: 2px solid var(--primary);
+            border-radius: 50%; position: fixed; pointer-events: none;
+            z-index: 9999; transition: transform 0.1s, opacity 0.3s;
         }
 
-        /* ==================== 导航栏 ==================== */
-        nav {
-            position: fixed; top: 0; width: 100%; z-index: 1000;
-            padding: 20px; transition: 0.4s;
+        /* ==================== 极光动态背景 ==================== */
+        .aurora-bg {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; filter: blur(100px); opacity: 0.4;
         }
-        nav.scrolled { background: rgba(255,255,255,0.8); backdrop-filter: blur(10px); padding: 10px 20px; }
-        .nav-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-family: 'Dancing Script', cursive; font-size: 28px; color: var(--primary); font-weight: bold; }
+        .blob {
+            position: absolute; width: 50vw; height: 50vw;
+            border-radius: 50%; animation: move 20s infinite alternate;
+        }
+        @keyframes move {
+            0% { transform: translate(-10%, -10%) rotate(0deg); background: var(--secondary); }
+            50% { transform: translate(20%, 30%) rotate(90deg); background: var(--primary); }
+            100% { transform: translate(-20%, 10%) rotate(180deg); background: var(--accent); }
+        }
+
+        /* ==================== 头部：沉浸式计时 ==================== */
+        header {
+            height: 100vh; display: flex; flex-direction: column;
+            justify-content: center; align-items: center; text-align: center;
+        }
+        .hero-title {
+            font-family: 'Cinzel', serif; font-size: 5rem; letter-spacing: 10px;
+            background: linear-gradient(to right, #fff, var(--primary));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 20px; opacity: 0; transform: translateY(30px);
+        }
+        .timer-box { display: flex; gap: 30px; margin-top: 40px; }
+        .t-unit { position: relative; }
+        .t-num { font-size: 4rem; font-weight: 300; color: #fff; text-shadow: 0 0 20px var(--primary); }
+        .t-label { font-size: 0.8rem; letter-spacing: 3px; color: var(--primary); opacity: 0.7; }
+
+        /* ==================== 创意组件：互动卡片 ==================== */
+        .section-wrap { padding: 100px 5vw; max-width: 1400px; margin: 0 auto; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
         
-        .nav-links { display: flex; gap: 20px; }
-        .nav-links a { text-decoration: none; color: var(--text-main); font-weight: 600; font-size: 14px; }
+        .card {
+            background: var(--card-bg); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 20px; padding: 40px; position: relative;
+            overflow: hidden; transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        .card:hover {
+            border-color: var(--primary); transform: translateY(-10px) scale(1.02);
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0, 242, 255, 0.1);
+        }
+        .card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transition: 0.5s;
+        }
+        .card:hover::before { left: 100%; }
 
-        /* ==================== Hero 计时器 & 里程碑 ==================== */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px 20px; text-align: center; }
-        .timer-container { margin-bottom: 40px; }
-        .timer-display { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
-        .timer-item { position: relative; width: 80px; }
-        .timer-num { font-size: 2.5rem; font-weight: 800; color: var(--primary); display: block; }
-        .timer-label { font-size: 12px; color: var(--text-light); text-transform: uppercase; }
-
-        .milestone-tag {
-            display: inline-block; padding: 8px 20px; background: white; border-radius: 50px;
-            font-size: 14px; color: var(--secondary); margin-top: 20px; border: 1px dashed var(--secondary);
-            animation: float 3s ease-in-out infinite;
+        /* 时间轴：垂直轨道感 */
+        .timeline-v { position: relative; border-left: 1px solid rgba(255,255,255,0.1); margin-left: 20px; padding-left: 40px; }
+        .time-node { margin-bottom: 60px; position: relative; opacity: 0; transform: translateX(30px); }
+        .time-node::after {
+            content: ''; position: absolute; left: -46px; top: 10px;
+            width: 10px; height: 10px; background: var(--primary); border-radius: 50%;
+            box-shadow: 0 0 15px var(--primary);
         }
 
-        /* ==================== 创意功能：记忆翻牌 ==================== */
-        .roulette-btn {
-            background: linear-gradient(45deg, var(--primary), var(--secondary));
-            color: white; border: none; padding: 12px 30px; border-radius: 50px;
-            font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 30px;
-            box-shadow: 0 10px 20px rgba(255, 117, 140, 0.4);
+        /* 按钮：磁力感 */
+        .mag-btn {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 15px 40px; border-radius: 100px; font-size: 14px; font-weight: 600;
+            letter-spacing: 2px; transition: var(--transition); position: relative;
+            overflow: hidden; margin-top: 30px;
         }
-        .roulette-btn:hover { transform: scale(1.05); box-shadow: 0 15px 25px rgba(255, 117, 140, 0.5); }
+        .mag-btn:hover { background: var(--primary); color: #000; box-shadow: 0 0 30px var(--primary); }
 
-        /* ==================== 恋爱清单 ==================== */
-        .section { max-width: 1200px; margin: 80px auto; padding: 0 20px; }
-        .section-title { text-align: center; font-size: 2.2rem; margin-bottom: 50px; font-family: 'Noto Serif SC'; }
-        
-        .bucket-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; }
-        .bucket-item { padding: 25px; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
-        .bucket-item.completed { opacity: 0.7; background: rgba(255,255,255,0.4); }
-        .bucket-item.completed .check-box { background: var(--primary); color: white; }
-        .check-box { width: 30px; height: 30px; border: 2px solid var(--primary); border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-
-        /* ==================== 时光胶囊 ==================== */
-        .capsule-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .capsule-card { padding: 30px; text-align: center; position: relative; overflow: hidden; }
-        .capsule-lock { font-size: 40px; margin-bottom: 15px; display: block; }
-        .capsule-date { font-size: 13px; color: var(--text-light); }
-        .capsule-blur { filter: blur(8px); pointer-events: none; user-select: none; margin-top: 15px; }
-        .capsule-unlocked .capsule-blur { filter: none; pointer-events: auto; }
-
-        /* ==================== 时间轴 & 相册 (复用原有风格但优化) ==================== */
-        .timeline { position: relative; max-width: 800px; margin: 0 auto; }
-        .timeline::before { content: ''; position: absolute; left: 50%; width: 2px; height: 100%; background: var(--accent); transform: translateX(-50%); }
-        .timeline-item { width: 50%; padding: 20px; position: relative; clear: both; }
-        .timeline-item:nth-child(even) { float: right; text-align: left; padding-left: 40px; }
-        .timeline-item:nth-child(odd) { float: left; text-align: right; padding-right: 40px; }
-        .timeline-dot { position: absolute; width: 16px; height: 16px; background: var(--primary); border-radius: 50%; top: 30px; }
-        .timeline-item:nth-child(even) .timeline-dot { left: -8px; }
-        .timeline-item:nth-child(odd) .timeline-dot { right: -8px; }
-
-        /* ==================== 弹窗设计 (用于管理和抽奖) ==================== */
-        .modal { 
-            position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);
-            display: none; align-items: center; justify-content: center; z-index: 2000; padding: 20px;
+        /* ==================== 弹窗设计 ==================== */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.95);
+            display: none; align-items: center; justify-content: center; z-index: 10000;
         }
-        .modal-content { width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; padding: 40px; position: relative; }
-        .close-btn { position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer; }
-
-        input, textarea, select {
-            width: 100%; padding: 12px; margin: 10px 0; border-radius: 12px; border: 1px solid #eee; outline: none;
+        .admin-panel { width: 90%; max-width: 600px; padding: 50px; background: #0a0a0f; border: 1px solid var(--primary); border-radius: 30px; }
+        input, textarea {
+            background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 15px; width: 100%; margin: 10px 0; border-radius: 10px;
         }
 
-        /* 动画 */
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-        
-        /* 响应式适配 */
+        /* 测试图片样式 */
+        .preview-img { width: 100%; border-radius: 15px; margin-bottom: 20px; filter: grayscale(0.5); transition: 0.5s; }
+        .card:hover .preview-img { filter: grayscale(0); }
+
         @media (max-width: 768px) {
-            .timeline::before { left: 20px; }
-            .timeline-item { width: 100%; float: none !important; text-align: left !important; padding-left: 45px !important; }
-            .timeline-dot { left: 12px !important; }
-            .timer-num { font-size: 1.8rem; }
-            .timer-item { width: 60px; }
+            .hero-title { font-size: 2.5rem; }
+            .t-num { font-size: 2rem; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas" style="position: fixed; top:0; left:0; z-index:-1;"></canvas>
-
-    <nav id="navbar">
-        <div class="nav-content">
-            <div class="logo">Our Love Story</div>
-            <div class="nav-links">
-                <a href="#wishlist">愿望清单</a>
-                <a href="#capsule">时光胶囊</a>
-                <a href="#timeline">时光轴</a>
-                <a href="javascript:void(0)" onclick="openAdmin()">管理</a>
-            </div>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="timer-container">
-            <h2 style="font-family: 'Noto Serif SC';">我们已经相爱了</h2>
-            <div class="timer-display" id="main-timer">
-                <div class="timer-item"><span class="timer-num" id="d">0</span><span class="timer-label">Days</span></div>
-                <div class="timer-item"><span class="timer-num" id="h">0</span><span class="timer-label">Hrs</span></div>
-                <div class="timer-item"><span class="timer-num" id="m">0</span><span class="timer-label">Min</span></div>
-                <div class="timer-item"><span class="timer-num" id="s">0</span><span class="timer-label">Sec</span></div>
-            </div>
-            <div id="next-milestone" class="milestone-tag">加载中...</div>
-        </div>
-        
-        <button class="roulette-btn" onclick="triggerRoulette()">🎲 翻开一段旧时光</button>
-    </header>
-
-    <section class="section" id="wishlist">
-        <h2 class="section-title">💕 恋爱清单</h2>
-        <div class="bucket-grid" id="bucket-list-container">
-            </div>
-    </section>
-
-    <section class="section" id="capsule">
-        <h2 class="section-title">⏳ 时光胶囊</h2>
-        <div class="capsule-grid" id="capsule-container">
-            </div>
-    </section>
-
-    <section class="section" id="timeline">
-        <h2 class="section-title">📅 时光轨迹</h2>
-        <div class="timeline" id="timeline-container">
-            </div>
-    </section>
-
-    <div id="adminModal" class="modal">
-        <div class="modal-content glass-card">
-            <span class="close-btn" onclick="closeAdmin()">&times;</span>
-            <h3 style="margin-bottom:20px;">秘密基地管理</h3>
-            
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <button onclick="switchAdminTab('event')" class="roulette-btn" style="padding:8px 15px;">记事/图片</button>
-                <button onclick="switchAdminTab('wish')" class="roulette-btn" style="padding:8px 15px;">愿望</button>
-                <button onclick="switchAdminTab('capsule')" class="roulette-btn" style="padding:8px 15px;">胶囊</button>
-            </div>
-
-            <div id="admin-form-area">
-                </div>
-
-            <hr style="margin:20px 0; opacity:0.2;">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
-                <button onclick="exportData()" style="background:#f0f0f0; border:none; padding:10px; border-radius:10px; cursor:pointer;">💾 导出备份</button>
-                <button onclick="importData()" style="background:#f0f0f0; border:none; padding:10px; border-radius:10px; cursor:pointer;">📥 导入数据</button>
-            </div>
-        </div>
+    <div id="cursor"></div>
+    <div class="aurora-bg">
+        <div class="blob"></div>
     </div>
 
-    <div id="rouletteModal" class="modal">
-        <div class="modal-content glass-card" style="text-align:center;">
-            <span class="close-btn" onclick="document.getElementById('rouletteModal').style.display='none'">&times;</span>
-            <div id="roulette-result"></div>
+    <nav style="position: fixed; top: 40px; right: 40px; z-index: 100;">
+        <button class="mag-btn" style="padding: 10px 20px;" onclick="toggleAdmin()">SECRET ACCESS</button>
+    </nav>
+
+    <header>
+        <h1 class="hero-title" id="title-text">BEYOND TIME</h1>
+        <div class="timer-box" id="countdown">
+            <div class="t-unit"><div class="t-num" id="d">000</div><div class="t-label">DAYS</div></div>
+            <div class="t-unit"><div class="t-num" id="h">00</div><div class="t-label">HOURS</div></div>
+            <div class="t-unit"><div class="t-num" id="m">00</div><div class="t-label">MINS</div></div>
+            <div class="t-unit"><div class="t-num" id="s">00</div><div class="t-label">SECS</div></div>
+        </div>
+        <div id="milestone-msg" style="margin-top: 30px; font-size: 14px; opacity: 0.6; color: var(--primary);"></div>
+        <button class="mag-btn" onclick="randomMemory()">✦ RANDOMLY SURPRISE ✦</button>
+    </header>
+
+    <section class="section-wrap">
+        <h2 style="font-family: 'Cinzel'; margin-bottom: 60px; color: var(--accent);">01. BUCKET LIST</h2>
+        <div class="grid" id="wish-grid"></div>
+    </section>
+
+    <section class="section-wrap">
+        <h2 style="font-family: 'Cinzel'; margin-bottom: 60px; color: var(--primary);">02. CHRONICLES</h2>
+        <div class="timeline-v" id="history-flow"></div>
+    </section>
+
+    <section class="section-wrap">
+        <h2 style="font-family: 'Cinzel'; margin-bottom: 60px; color: var(--secondary);">03. TIME CAPSULES</h2>
+        <div class="grid" id="capsule-grid"></div>
+    </section>
+
+    <div class="overlay" id="admin-overlay">
+        <div class="admin-panel">
+            <h2 style="margin-bottom: 30px;">RECORD MOMENT</h2>
+            <select id="type-select">
+                <option value="history">时间轴事件</option>
+                <option value="wish">愿望清单</option>
+                <option value="capsule">时光胶囊</option>
+            </select>
+            <input type="text" id="ipt-title" placeholder="标题">
+            <textarea id="ipt-desc" rows="4" placeholder="写下内容..."></textarea>
+            <input type="date" id="ipt-date">
+            <input type="file" id="ipt-img" accept="image/*" onchange="encodeImg(this)">
+            <button class="mag-btn" style="width: 100%; margin-top: 20px;" onclick="submitData()">PUBLISH TO ETERNITY</button>
+            <button onclick="toggleAdmin()" style="margin-top: 20px; background: none; border: none; color: #555; width: 100%;">CLOSE</button>
         </div>
     </div>
 
     <script>
-        // ==================== 配置与数据 ====================
+        // ==================== 核心配置与测试数据 ====================
         const CONFIG = {
-            startDate: '2024-05-20T00:00:00', // 恋爱开始时间
-            password: '1314', // 管理密码
-            music: 'https://api.uomg.com/api/rand.music?sort=热歌榜' // 示例音乐
+            start: '2024-05-20T13:14:00',
+            pass: '1314'
         };
 
-        // 数据存储结构
-        let storage = {
-            events: JSON.parse(localStorage.getItem('love_events')) || [],
-            wishes: JSON.parse(localStorage.getItem('love_wishes')) || [],
-            capsules: JSON.parse(localStorage.getItem('love_capsules')) || []
+        const TEST_DATA = {
+            wishes: [
+                { text: "一起去北欧看一次极光", completed: false },
+                { text: "养一只叫『布丁』的小猫", completed: true },
+                { text: "学会潜水并拍一张水下合照", completed: false }
+            ],
+            history: [
+                { date: "2024-05-20", title: "第一次心动", desc: "在那个街角的书店，阳光正好，你抬头看向我。", img: "https://picsum.photos/800/500?random=1" },
+                { date: "2024-12-25", title: "初雪下的拥抱", desc: "我们在雪地里走了很久，你说我们要一直走到白头。", img: "https://picsum.photos/800/500?random=2" }
+            ],
+            capsules: [
+                { unlock: "2026-02-14", title: "给两周年后的我们", content: "希望那时候我们已经有了自己的小家，记得看柜子里的惊喜。" },
+                { unlock: "2029-05-20", title: "五周年寄语", content: "五年的时光，希望能保持最初的热烈。" }
+            ]
         };
 
-        // ==================== 核心：计时器与里程碑 ====================
-        function initTimer() {
-            const update = () => {
-                const start = new Date(CONFIG.startDate).getTime();
-                const now = new Date().getTime();
-                const diff = now - start;
+        // ==================== 初始化与存储 ====================
+        let storage = JSON.parse(localStorage.getItem('infinite_love')) || TEST_DATA;
 
-                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-                document.getElementById('d').innerText = days;
-                document.getElementById('h').innerText = hours;
-                document.getElementById('m').innerText = minutes;
-                document.getElementById('s').innerText = seconds;
-
-                // 计算里程碑
-                let next;
-                const milestones = [100, 200, 300, 365, 520, 800, 1000, 1314, 2000];
-                for (let m of milestones) {
-                    if (m > days) { next = m; break; }
-                }
-                document.getElementById('next-milestone').innerText = `✨ 距离我们的 ${next} 天纪念日还剩 ${next - days} 天`;
-            };
-            setInterval(update, 1000);
-            update();
+        function init() {
+            renderWishes();
+            renderHistory();
+            renderCapsules();
+            startTimer();
+            animateOnScroll();
+            initCursor();
+            
+            // 标题入场动画
+            setTimeout(() => {
+                const t = document.getElementById('title-text');
+                t.style.opacity = "1";
+                t.style.transform = "translateY(0)";
+            }, 500);
         }
 
-        // ==================== 创意功能：记忆抽奖 ====================
-        function triggerRoulette() {
-            const allMemories = [...storage.events, ...storage.wishes.filter(w => w.completed)];
-            if (allMemories.length === 0) {
-                alert("记忆库还是空的哦，快去添加点点滴滴吧！");
-                return;
-            }
-
-            const item = allMemories[Math.floor(Math.random() * allMemories.length)];
-            const resultDiv = document.getElementById('roulette-result');
-            
-            resultDiv.innerHTML = `
-                <h2 style="color:var(--primary); margin-bottom:15px;">还记得这天吗？</h2>
-                ${item.image ? `<img src="${item.image}" style="width:100%; border-radius:15px; margin-bottom:15px;">` : ''}
-                <p style="font-size:18px; font-weight:600;">${item.title || item.text}</p>
-                <p style="color:var(--text-light); font-size:14px; margin-top:10px;">${item.date || '心愿达成日'}</p>
-            `;
-            
-            document.getElementById('rouletteModal').style.display = 'flex';
-        }
-
-        // ==================== 数据渲染逻辑 ====================
-        function renderAll() {
-            // 渲染愿望
-            const wishContainer = document.getElementById('bucket-list-container');
-            wishContainer.innerHTML = storage.wishes.map((w, i) => `
-                <div class="bucket-item glass-card ${w.completed ? 'completed' : ''}" onclick="toggleWish(${i})">
-                    <div class="check-box">${w.completed ? '✓' : ''}</div>
-                    <span>${w.text}</span>
+        // ==================== 渲染函数 ====================
+        function renderWishes() {
+            const container = document.getElementById('wish-grid');
+            container.innerHTML = storage.wishes.map((w, i) => `
+                <div class="card" onclick="toggleWish(${i})">
+                    <div style="font-size: 12px; color: var(--accent); margin-bottom: 10px;">${w.completed ? 'COMPLETED' : 'PENDING'}</div>
+                    <p style="font-size: 1.2rem; ${w.completed ? 'text-decoration: line-through; opacity: 0.5;' : ''}">${w.text}</p>
                 </div>
             `).join('');
+        }
 
-            // 渲染时光胶囊
-            const capsuleContainer = document.getElementById('capsule-container');
-            const now = new Date().getTime();
-            capsuleContainer.innerHTML = storage.capsules.map(c => {
-                const unlockTime = new Date(c.unlockDate).getTime();
-                const isLocked = now < unlockTime;
+        function renderHistory() {
+            const container = document.getElementById('history-flow');
+            container.innerHTML = storage.history.sort((a,b) => new Date(b.date) - new Date(a.date)).map(h => `
+                <div class="time-node">
+                    <div class="card">
+                        <div style="color: var(--primary); font-size: 12px; margin-bottom: 15px;">${h.date}</div>
+                        <h3>${h.title}</h3>
+                        <p style="margin: 15px 0; font-size: 0.9rem; line-height: 1.8; opacity: 0.7;">${h.desc}</p>
+                        ${h.img ? `<img src="${h.img}" class="preview-img">` : ''}
+                    </div>
+                </div>
+            `).join('');
+            animateOnScroll();
+        }
+
+        function renderCapsules() {
+            const container = document.getElementById('capsule-grid');
+            const now = new Date();
+            container.innerHTML = storage.capsules.map(c => {
+                const isLocked = new Date(c.unlock) > now;
                 return `
-                    <div class="capsule-card glass-card ${isLocked ? '' : 'capsule-unlocked'}">
-                        <span class="capsule-lock">${isLocked ? '🔒' : '🎁'}</span>
-                        <div class="capsule-date">计划解锁：${c.unlockDate}</div>
-                        <div class="${isLocked ? 'capsule-blur' : ''}">
-                            <h4 style="margin:10px 0;">${isLocked ? '这是一个秘密' : c.title}</h4>
-                            <p>${isLocked ? '等到那天再来揭开吧...' : c.content}</p>
+                    <div class="card" style="${isLocked ? 'filter: brightness(0.7);' : ''}">
+                        <div style="font-size: 40px; margin-bottom: 20px;">${isLocked ? '🔒' : '🔓'}</div>
+                        <h3>${isLocked ? '锁定中...' : c.title}</h3>
+                        <p style="font-size: 12px; margin: 10px 0; color: var(--secondary);">UNLOCKED AT: ${c.unlock}</p>
+                        <div style="${isLocked ? 'filter: blur(10px); pointer-events: none;' : ''}">
+                            <p style="opacity: 0.8;">${c.content}</p>
                         </div>
                     </div>
                 `;
             }).join('');
-
-            // 渲染时间轴
-            const timelineContainer = document.getElementById('timeline-container');
-            timelineContainer.innerHTML = storage.events.sort((a,b) => new Date(b.date) - new Date(a.date)).map(e => `
-                <div class="timeline-item">
-                    <div class="timeline-dot"></div>
-                    <div class="glass-card" style="padding:20px;">
-                        <span style="font-size:12px; color:var(--primary);">${e.date}</span>
-                        <h4 style="margin:5px 0;">${e.title}</h4>
-                        ${e.image ? `<img src="${e.image}" style="width:100%; border-radius:10px; margin:10px 0;">` : ''}
-                        <p style="font-size:14px;">${e.text}</p>
-                    </div>
-                </div>
-            `).join('');
         }
 
-        // ==================== 管理逻辑 ====================
-        let currentTab = 'event';
-        function switchAdminTab(tab) {
-            currentTab = tab;
-            const area = document.getElementById('admin-form-area');
-            if(tab === 'event') {
-                area.innerHTML = `
-                    <input type="text" id="ev-title" placeholder="事件标题">
-                    <textarea id="ev-text" placeholder="描述这天的故事..."></textarea>
-                    <input type="date" id="ev-date">
-                    <input type="file" id="ev-img" accept="image/*" onchange="handleImage(this)">
-                    <button onclick="saveEvent()" class="roulette-btn" style="width:100%;">保存回忆</button>
-                `;
-            } else if(tab === 'wish') {
-                area.innerHTML = `
-                    <input type="text" id="wi-text" placeholder="我们的下一个愿望是...">
-                    <button onclick="saveWish()" class="roulette-btn" style="width:100%;">加入清单</button>
-                `;
-            } else if(tab === 'capsule') {
-                area.innerHTML = `
-                    <input type="text" id="ca-title" placeholder="给未来的信封标题">
-                    <textarea id="ca-content" placeholder="写下现在的悄悄话..."></textarea>
-                    <p style="font-size:12px; color:gray;">解锁日期：</p>
-                    <input type="date" id="ca-date">
-                    <button onclick="saveCapsule()" class="roulette-btn" style="width:100%;">封存胶囊</button>
-                `;
+        // ==================== 功能逻辑 ====================
+        function startTimer() {
+            const update = () => {
+                const diff = new Date() - new Date(CONFIG.start);
+                const d = Math.floor(diff / 86400000);
+                const h = Math.floor((diff % 86400000) / 3600000);
+                const m = Math.floor((diff % 3600000) / 60000);
+                const s = Math.floor((diff % 60000) / 1000);
+
+                document.getElementById('d').innerText = d.toString().padStart(3, '0');
+                document.getElementById('h').innerText = h.toString().padStart(2, '0');
+                document.getElementById('m').innerText = m.toString().padStart(2, '0');
+                document.getElementById('s').innerText = s.toString().padStart(2, '0');
+
+                // 里程碑计算
+                const next = [100, 365, 500, 520, 1000].find(m => m > d) || (Math.floor(d/100)+1)*100;
+                document.getElementById('milestone-msg').innerText = `NEXT MILESTONE: ${next} DAYS (IN ${next-d} DAYS)`;
+            };
+            setInterval(update, 1000); update();
+        }
+
+        function randomMemory() {
+            const pool = [...storage.history];
+            const item = pool[Math.floor(Math.random() * pool.length)];
+            alert(`还记得那次吗？\n\n【${item.title}】\n${item.desc}`);
+        }
+
+        // ==================== 动画与交互 ====================
+        function initCursor() {
+            const cursor = document.getElementById('cursor');
+            document.addEventListener('mousemove', e => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            });
+            document.addEventListener('mousedown', () => cursor.style.transform = 'scale(0.8)');
+            document.addEventListener('mouseup', () => cursor.style.transform = 'scale(1)');
+        }
+
+        function animateOnScroll() {
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = "1";
+                        entry.target.style.transform = "translate(0,0)";
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.time-node, .card').forEach(el => observer.observe(el));
+        }
+
+        // ==================== 管理后台逻辑 ====================
+        let tempImg = "";
+        function toggleAdmin() {
+            const overlay = document.getElementById('admin-overlay');
+            if (overlay.style.display === 'flex') {
+                overlay.style.display = 'none';
+            } else {
+                const p = prompt("ACCESS CODE:");
+                if (p === CONFIG.pass) overlay.style.display = 'flex';
             }
         }
 
-        let tempImage = "";
-        function handleImage(input) {
+        function encodeImg(input) {
             const reader = new FileReader();
-            reader.onload = e => tempImage = e.target.result;
+            reader.onload = e => tempImg = e.target.result;
             reader.readAsDataURL(input.files[0]);
         }
 
-        function saveEvent() {
-            const data = {
-                title: document.getElementById('ev-title').value,
-                text: document.getElementById('ev-text').value,
-                date: document.getElementById('ev-date').value,
-                image: tempImage
-            };
-            storage.events.push(data);
-            syncAndRefresh();
-        }
+        function submitData() {
+            const type = document.getElementById('type-select').value;
+            const title = document.getElementById('ipt-title').value;
+            const desc = document.getElementById('ipt-desc').value;
+            const date = document.getElementById('ipt-date').value;
 
-        function saveWish() {
-            storage.wishes.push({ text: document.getElementById('wi-text').value, completed: false });
-            syncAndRefresh();
-        }
-
-        function saveCapsule() {
-            storage.capsules.push({
-                title: document.getElementById('ca-title').value,
-                content: document.getElementById('ca-content').value,
-                unlockDate: document.getElementById('ca-date').value
-            });
-            syncAndRefresh();
-        }
-
-        function toggleWish(index) {
-            storage.wishes[index].completed = !storage.wishes[index].completed;
-            syncAndRefresh();
-        }
-
-        function syncAndRefresh() {
-            localStorage.setItem('love_events', JSON.stringify(storage.events));
-            localStorage.setItem('love_wishes', JSON.stringify(storage.wishes));
-            localStorage.setItem('love_capsules', JSON.stringify(storage.capsules));
-            renderAll();
-            tempImage = "";
-            alert("已同步到你的空间！");
-        }
-
-        // ==================== 数据备份功能 ====================
-        function exportData() {
-            const dataStr = JSON.stringify(storage);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `love_backup_${new Date().toLocaleDateString()}.json`;
-            a.click();
-        }
-
-        function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.onchange = e => {
-                const reader = new FileReader();
-                reader.onload = ev => {
-                    const imported = JSON.parse(ev.target.result);
-                    if(confirm("导入将覆盖现有数据，确定吗？")) {
-                        storage = imported;
-                        syncAndRefresh();
-                    }
-                };
-                reader.readAsText(e.target.files[0]);
-            };
-            input.click();
-        }
-
-        // ==================== 界面控制 ====================
-        function openAdmin() {
-            const pass = prompt("请输入暗号：");
-            if(pass === CONFIG.password) {
-                document.getElementById('adminModal').style.display = 'flex';
-                switchAdminTab('event');
-            } else {
-                alert("暗号不对哦，亲爱的~");
+            if (type === 'history') {
+                storage.history.push({ date, title, desc, img: tempImg });
+            } else if (type === 'wish') {
+                storage.wishes.push({ text: title, completed: false });
+            } else if (type === 'capsule') {
+                storage.capsules.push({ unlock: date, title, content: desc });
             }
+
+            localStorage.setItem('infinite_love', JSON.stringify(storage));
+            location.reload();
         }
 
-        function closeAdmin() {
-            document.getElementById('adminModal').style.display = 'none';
+        function toggleWish(idx) {
+            storage.wishes[idx].completed = !storage.wishes[idx].completed;
+            localStorage.setItem('infinite_love', JSON.stringify(storage));
+            renderWishes();
         }
 
-        // 简易粒子背景
-        function initParticles() {
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            let w, h, particles = [];
-            const resize = () => { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; };
-            window.onresize = resize; resize();
-            
-            for(let i=0; i<50; i++) particles.push({ x: Math.random()*w, y: Math.random()*h, r: Math.random()*2+1, v: Math.random()*0.5 });
-            
-            function animate() {
-                ctx.clearRect(0,0,w,h);
-                ctx.fillStyle = "rgba(255, 117, 140, 0.2)";
-                particles.forEach(p => {
-                    p.y -= p.v;
-                    if(p.y < -10) p.y = h + 10;
-                    ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-                });
-                requestAnimationFrame(animate);
-            }
-            animate();
-        }
-
-        // 初始化
-        window.onload = () => {
-            initTimer();
-            initParticles();
-            renderAll();
-            
-            // 导航栏效果
-            window.addEventListener('scroll', () => {
-                document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
-            });
-        };
+        window.onload = init;
     </script>
 </body>
 </html>
